@@ -99,14 +99,20 @@ if (document.getElementById("updateForm")) {
     fill("grade", data.grade);
 
     // إذا كانت البيانات مؤكدة مسبقًا
-    if (data.status === "تم التأكيد") {
-      document
-        .querySelectorAll("input, select")
-        .forEach((i) => i.setAttribute("readonly", true));
-      document.getElementById("saveBtn").disabled = true;
-      msg.textContent = "تم تأكيد البيانات مسبقًا — عرض فقط.";
-      return;
-    }
+if (data.status === "تم التأكيد") {
+  document
+    .querySelectorAll("input, select")
+    .forEach((i) => i.setAttribute("readonly", true));
+  document.getElementById("saveBtn").disabled = true;
+  msg.textContent = "تم تأكيد البيانات مسبقًا — عرض فقط.";
+} else {
+  // 🟢 ضع هنا الكود الذي يتعامل مع الحالة العادية
+  document.getElementById("updateForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    document.getElementById("confirmBox").classList.remove("hidden");
+  });
+}
+
 
     // عند الضغط على زر حفظ
     document
