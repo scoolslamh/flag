@@ -10,7 +10,7 @@ const SUPABASE_KEY =
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // 🔗 رابط Google Apps Script (خاص برفع الملف فقط)
-const DRIVE_API ="https://script.google.com/macros/s/AKfycbx2W4eSO0OxuwkRHM0-JeU300eh_X03xKNiC0JTciWANKZJ55BxddcbFIl8H2hIg5w6hg/exec";
+const DRIVE_API ="https://script.google.com/macros/s/AKfycbxuupLpq3JAb8I4Ek2YqQF6Cc6hKfM-aZleyZuveTS79DlJVbYCLLnaoExL__7-SaMLIA/exec";
 
 
 // ============================
