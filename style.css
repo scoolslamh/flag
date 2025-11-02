@@ -1,12 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap');
 
+/* 🎯 ألوان وهوية قسم الأمن والسلامة والمرافق */
 :root {
   --edu-green: #006c35;
   --edu-light: #00907f;
   --edu-bg: #f6f9f7;
   --edu-text: #13344F;
+  --edu-gray: #e8ecea;
 }
 
+/* ✅ الجسم العام */
 body {
   font-family: 'Tajawal', sans-serif;
   background: var(--edu-bg);
@@ -15,81 +18,161 @@ body {
   justify-content: center;
   min-height: 100vh;
   margin: 0;
+  padding: 15px;
+  color: var(--edu-text);
 }
 
+/* ✅ الحاوية */
 .container {
   background: #fff;
-  width: 95%;
-  max-width: 650px;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 680px;
+  padding: 30px 25px;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 108, 53, 0.15);
+  transition: 0.3s ease;
 }
 
+.container:hover {
+  box-shadow: 0 6px 25px rgba(0, 108, 53, 0.25);
+}
+
+/* ✅ الهيدر */
 .header {
+  background: linear-gradient(135deg, var(--edu-green), var(--edu-light));
+  color: #fff;
   text-align: center;
+  padding: 18px;
+  border-radius: 10px;
   margin-bottom: 20px;
 }
 
-.header img {
-  width: 160px;
+.header h1 {
+  font-size: 20px;
+  margin: 0;
+  letter-spacing: 0.5px;
 }
 
+/* ✅ العنوان الرئيسي */
 h2 {
   color: var(--edu-green);
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   text-align: center;
+  font-size: 18px;
+}
+
+/* ✅ تنسيق عناصر النموذج */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 label {
   font-weight: 600;
   color: var(--edu-text);
-  display: block;
-  margin-top: 10px;
+  margin-top: 4px;
 }
 
 input, select {
   width: 100%;
-  padding: 10px;
-  margin-top: 6px;
+  padding: 10px 12px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 8px;
   font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus, select:focus {
+  border-color: var(--edu-light);
+  outline: none;
+  box-shadow: 0 0 4px rgba(0, 144, 127, 0.3);
 }
 
 input[readonly] {
-  background: #f5f5f5;
+  background: var(--edu-gray);
+  cursor: not-allowed;
 }
 
+/* ✅ الأزرار */
 button {
   background: var(--edu-green);
   color: #fff;
-  padding: 12px;
+  padding: 14px;
   border: none;
   border-radius: 8px;
   margin-top: 20px;
-  font-weight: bold;
+  font-weight: 700;
+  font-size: 16px;
   width: 100%;
   cursor: pointer;
+  transition: 0.3s ease;
 }
 
 button:hover {
   background: var(--edu-light);
+  transform: scale(1.02);
 }
 
+button:active {
+  transform: scale(0.98);
+}
+
+/* ✅ رسائل التأكيد أو الخطأ */
 .msg {
   text-align: center;
-  color: #d00;
-  margin-top: 10px;
+  margin-top: 12px;
+  font-weight: 600;
+  color: var(--edu-green);
+}
+
+/* ✅ مربع التأكيد */
+#confirmBox {
+  background: #fff;
+  border: 2px solid var(--edu-green);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 15px;
+}
+
+#confirmBox p {
+  margin-bottom: 10px;
+  color: var(--edu-text);
 }
 
 .hidden {
   display: none;
 }
 
-@media (max-width: 480px) {
+/* ✅ تحسين العرض على الجوال */
+@media (max-width: 600px) {
+  .container {
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 16px;
+  }
+
+  button {
+    font-size: 15px;
+  }
+}
+
+/* ✅ تحسين خاص للأجهزة الصغيرة جدًا */
+@media (max-width: 400px) {
   .container {
     padding: 15px;
   }
+
+  .header h1 {
+    font-size: 18px;
+  }
+
+  input, select {
+    font-size: 14px;
+    padding: 8px;
+  }
 }
-  

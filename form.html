@@ -3,75 +3,105 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>بيانات المدرسة</title>
+  <title>تحديث بيانات المدرسة</title>
   <link rel="stylesheet" href="./style.css" />
   <link rel="icon" href="https://moe.gov.sa/ar/PublishingImages/logo.png" type="image/png" />
 </head>
 
 <body>
   <div class="container">
-    <!-- ✅ الهيدر -->
+    <!-- ✅ الهيدر الجديد -->
     <div class="header">
-      <img
-        src="https://moe.gov.sa/ar/PublishingImages/logo.png"
-        alt="شعار وزارة التعليم"
-        style="max-height: 70px"
-      />
+      <h1>قسم الأمن والسلامة والمرافق بتعليم عسير</h1>
     </div>
 
     <h2>تحديث بيانات منسق/ة الأمن والسلامة</h2>
 
-    <form id="updateForm">
-      <label>الرقم الوزاري</label>
-      <input type="text" id="schoolNumber" readonly />
+    <form id="updateForm" class="form">
+      <div class="form-group">
+        <label>الرقم الوزاري</label>
+        <input type="text" id="schoolNumber" readonly />
+      </div>
 
-      <label>اسم المدرسة</label>
-      <input type="text" id="schoolName" readonly />
+      <div class="form-group">
+        <label>اسم المدرسة</label>
+        <input type="text" id="schoolName" readonly />
+      </div>
 
-      <label>جنس المدرسة</label>
-      <input type="text" id="schoolGender" readonly />
+      <div class="form-group">
+        <label>جنس المدرسة</label>
+        <input type="text" id="schoolGender" readonly />
+      </div>
 
-      <label>المحافظة</label>
-      <input type="text" id="schoolArea" readonly />
+      <div class="form-group">
+        <label>المحافظة</label>
+        <input type="text" id="schoolArea" readonly />
+      </div>
 
-      <label>اسم مدير المدرسة</label>
-      <input type="text" id="principalName" />
+      <div class="form-group">
+        <label>اسم مدير المدرسة</label>
+        <input type="text" id="principalName" />
+      </div>
 
-      <label>جوال مدير المدرسة</label>
-      <input type="tel" id="principalPhone" inputmode="numeric" />
+      <div class="form-group">
+        <label>جوال مدير المدرسة</label>
+        <input type="tel" id="principalPhone" inputmode="numeric" />
+      </div>
 
-      <label>البريد الإلكتروني للمدرسة</label>
-      <input type="email" id="schoolEmail" />
+      <div class="form-group">
+        <label>البريد الإلكتروني للمدرسة</label>
+        <input type="email" id="schoolEmail" />
+      </div>
 
-      <label>الملكية</label>
-      <input type="text" id="ownership" />
+      <div class="form-group">
+        <label>الملكية</label>
+        <input type="text" id="ownership" />
+      </div>
 
-      <label>اسم منسق/ة الأمن والسلامة</label>
-      <input type="text" id="coordinatorName" required />
+      <div class="form-group">
+        <label>اسم منسق/ة الأمن والسلامة</label>
+        <input type="text" id="coordinatorName" required />
+      </div>
 
-      <label>السجل المدني للمنسق/ة</label>
-      <input type="text" id="coordinatorID" required inputmode="numeric" />
+      <div class="form-group">
+        <label>السجل المدني للمنسق/ة</label>
+        <input type="text" id="coordinatorID" required inputmode="numeric" />
+      </div>
 
-      <label>رقم الجوال للمنسق/ة</label>
-      <input type="tel" id="coordinatorPhone" required inputmode="numeric" />
+      <div class="form-group">
+        <label>رقم الجوال للمنسق/ة</label>
+        <input type="tel" id="coordinatorPhone" required inputmode="numeric" />
+      </div>
 
-      <label>الكادر الوظيفي</label>
-      <input type="text" id="jobType" />
+      <div class="form-group">
+        <label>الكادر الوظيفي</label>
+        <input type="text" id="jobType" />
+      </div>
 
-      <label>المؤهل العلمي</label>
-      <input type="text" id="qualification" />
+      <div class="form-group">
+        <label>المؤهل العلمي</label>
+        <input type="text" id="qualification" />
+      </div>
 
-      <label>المسمى الوظيفي في فارس</label>
-      <input type="text" id="farsTitle" />
+      <div class="form-group">
+        <label>المسمى الوظيفي في فارس</label>
+        <input type="text" id="farsTitle" />
+      </div>
 
-      <label>المستوى / المرتبة</label>
-      <input type="text" id="level" />
+      <div class="form-group">
+        <label>المستوى / المرتبة</label>
+        <input type="text" id="level" />
+      </div>
 
-      <label>الدرجة</label>
-      <input type="text" id="grade" />
+      <div class="form-group">
+        <label>الدرجة</label>
+        <input type="text" id="grade" />
+      </div>
 
-      <label>رفع قرار تكليف المنسق (PDF)</label>
-      <input type="file" id="assignmentFile" accept="application/pdf" />
+      <div class="form-group">
+        <label>رفع قرار تكليف المنسق (PDF)</label>
+        <input type="file" id="assignmentFile" accept="application/pdf" />
+      </div>
 
       <button type="submit" id="saveBtn">تحديث البيانات</button>
     </form>
@@ -87,4 +117,3 @@
   <script type="module" src="./script.js"></script>
 </body>
 </html>
-  
