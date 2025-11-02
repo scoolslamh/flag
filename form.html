@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بيانات المدرسة</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="https://moe.gov.sa/ar/PublishingImages/logo.png" alt="شعار وزارة التعليم">
+    </div>
+
+    <h2>تحديث بيانات منسق/ة الأمن والسلامة</h2>
+
+    <form id="updateForm">
+      <label>الرقم الوزاري</label>
+      <input type="text" id="schoolNumber" readonly>
+
+      <label>اسم المدرسة</label>
+      <input type="text" id="schoolName" readonly>
+
+      <label>جنس المدرسة</label>
+      <input type="text" id="schoolGender" readonly>
+
+      <label>المحافظة</label>
+      <input type="text" id="schoolArea" readonly>
+
+      <label>اسم مدير المدرسة</label>
+      <input type="text" id="principalName">
+
+      <label>جوال مدير المدرسة</label>
+      <input type="tel" id="principalPhone">
+
+      <label>البريد الإلكتروني للمدرسة</label>
+      <input type="email" id="schoolEmail">
+
+      <label>الملكية</label>
+      <input type="text" id="ownership">
+
+      <label>اسم منسق/ة الأمن والسلامة</label>
+      <input type="text" id="coordinatorName" required>
+
+      <label>السجل المدني للمنسق/ة</label>
+      <input type="text" id="coordinatorID" required>
+
+      <label>رقم الجوال للمنسق/ة</label>
+      <input type="tel" id="coordinatorPhone" required>
+
+      <label>الكادر الوظيفي</label>
+      <input type="text" id="jobType">
+
+      <label>المؤهل العلمي</label>
+      <input type="text" id="qualification">
+
+      <label>المسمى الوظيفي في فارس</label>
+      <input type="text" id="farsTitle">
+
+      <label>المستوى / المرتبة</label>
+      <input type="text" id="level">
+
+      <label>الدرجة</label>
+      <input type="text" id="grade">
+
+      <label>رفع قرار تكليف المنسق (PDF)</label>
+      <input type="file" id="assignmentFile" accept="application/pdf">
+
+      <button type="submit" id="saveBtn">تحديث البيانات</button>
+    </form>
+
+    <div id="confirmBox" class="hidden">
+      <p>أقر بصحة ودقة جميع البيانات التي تم إدخالها.</p>
+      <button id="confirmBtn">تأكيد وإرسال</button>
+    </div>
+
+    <p id="message" class="msg"></p>
+  </div>
+
+  <script type="module" src="script.js"></script>
+
+</body>
+</html>
