@@ -15,51 +15,54 @@ const DRIVE_API =
 
 
 // ============================
-// 🟢 صفحة الدخول
+// 🟢 صفحة الدخول (محدثة)
 // ============================
-if (document.getElementById("loginBtn")) {
-  const loginBtn = document.getElementById("loginBtn");
-  const msg = document.getElementById("message");
+if (document.getElementById('loginBtn')) {
+  const loginBtn = document.getElementById('loginBtn');
+  const msg = document.getElementById('message');
 
-  loginBtn.addEventListener("click", async () => {
-    const number = document.getElementById("schoolNumber").value.trim();
-    msg.textContent = "";
+  loginBtn.addEventListener('click', async () => {
+    const number = document.getElementById('schoolNumber').value.trim();
+    msg.textContent = '';
 
-    // ✅ تحقق من الرقم الوزاري
-    const digitsOnly = number.replace(/[^0-9]/g, "");
+    // ✅ التحقق من أن الرقم الوزاري يحتوي على 5 أرقام على الأقل
+    const digitsOnly = number.replace(/[^0-9]/g, '');
     if (digitsOnly.length < 5) {
-      msg.textContent = "الرقم الوزاري يجب ألا يقل عن 5 أرقام.";
+      msg.textContent = 'الرقم الوزاري يجب ألا يقل عن 5 أرقام.';
       return;
     }
 
+    // 🔄 إظهار رسالة تحميل
     loginBtn.disabled = true;
-    loginBtn.textContent = "جاري التحقق...";
+    loginBtn.textContent = 'جاري البحث...';
 
     try {
-      // 🔹 جلب البيانات من Supabase
+      // ✅ البحث الجزئي داخل الحقل (حتى لو كان الرقم داخل مجموعة مفصولة بشرطة)
       const { data, error } = await supabase
-        .from("schools")
-        .select("*")
-        .eq("number", number)
+        .from('schools')
+        .select('*')
+        .ilike('number', `%${number}%`)
         .maybeSingle();
 
       if (error) throw error;
 
       if (data) {
-        localStorage.setItem("schoolData", JSON.stringify(data));
-        window.location.href = "form.html";
+        localStorage.setItem('schoolData', JSON.stringify(data));
+        window.location.href = 'form.html';
       } else {
-        msg.textContent = "لم يتم العثور على الرقم الوزاري.";
+        msg.textContent = 'لم يتم العثور على الرقم الوزاري.';
       }
     } catch (err) {
-      msg.textContent = "⚠️ خطأ في الاتصال بقاعدة البيانات.";
+      msg.textContent = '⚠️ حدث خطأ في الاتصال بقاعدة البيانات.';
       console.error(err);
     } finally {
+      // 🔙 إعادة الزر إلى حالته الأصلية
       loginBtn.disabled = false;
-      loginBtn.textContent = "دخول";
+      loginBtn.textContent = 'دخول';
     }
   });
 }
+
 
 
 // ============================
