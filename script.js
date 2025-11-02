@@ -165,16 +165,27 @@ if (data.status === "تم التأكيد") {
           });
 
           try {
-            const res = await fetch(DRIVE_API, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    file: base64,
-    coordinatorName: fields.coordinator,
-    schoolName: document.getElementById("schoolName").value,
-  }),
-});
+  const res = await fetch(DRIVE_API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      file: base64,
+      coordinatorName: fields.coordinator || "منسق",
+      schoolName: document.getElementById("schoolName").value || "مدرسة"
+    }),
+  });
 
+  const result = await res.json();
+  if (result.success) {
+    fileUrl = result.url;
+    msg.textContent = `✅ تم رفع الملف بنجاح. 
+      <a href="${fileUrl}" target="_blank">عرض الملف في Google Drive</a>`;
+  }
+
+} catch (err) {
+  console.error("خطأ أثناء رفع الملف:", err);
+  msg.textContent = "❌ حدث خطأ أثناء رفع الملف.";
+}
 
         // 3️⃣ حفظ البيانات في Supabase
         const { error } = await supabase
