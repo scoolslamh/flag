@@ -9,7 +9,7 @@ const SUPABASE_KEY ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // 🔗 رابط Google Apps Script (خاص برفع الملف فقط)
-const DRIVE_API ="https://script.google.com/macros/s/AKfycbxioEhn23JekGSDFUbtSzo2MVQQovM0YVxJsTtg96Dli5I-09dMMXDmmaSWxFqT82wABQ/exec";
+const DRIVE_API ="https://proud-limit-0aff.alsalamh11234.workers.dev/";
 
 // ============================
 // 🟢 صفحة الدخول
