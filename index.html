@@ -1,27 +1,42 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>تحديث بيانات منسقي الأمن والسلامة</title>
-  <link rel="stylesheet" href="style.css">
+
+  <!-- 🔗 ملف التنسيق -->
+  <link rel="stylesheet" href="./style.css" />
+
+  <!-- 🧩 أيقونة المتصفح -->
+  <link rel="icon" href="https://moe.gov.sa/ar/PublishingImages/logo.png" type="image/png" />
 </head>
+
 <body>
   <div class="container">
+    <!-- ✅ الهيدر -->
     <div class="header">
-      <img src="https://moe.gov.sa/ar/PublishingImages/logo.png" alt="شعار وزارة التعليم">
+      <img
+        src="https://moe.gov.sa/ar/PublishingImages/logo.png"
+        alt="شعار وزارة التعليم"
+        style="max-height: 70px"
+      />
     </div>
 
     <h2>نظام تحديث بيانات منسقي الأمن والسلامة</h2>
     <p>الرجاء إدخال الرقم الوزاري للمدرسة</p>
-    
-    <input type="text" id="schoolNumber" placeholder="مثال: 123456 أو 123456-789012">
+
+    <input
+      type="text"
+      id="schoolNumber"
+      placeholder="مثال: 123456 أو 123456-789012"
+      inputmode="numeric"
+    />
     <button id="loginBtn">دخول</button>
     <p id="message" class="msg"></p>
   </div>
 
-  <script type="module" src="script.js"></script>
-
+  <!-- ✅ سكربت الاتصال -->
+  <script type="module" src="./script.js"></script>
 </body>
 </html>
-

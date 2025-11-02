@@ -1,70 +1,77 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>بيانات المدرسة</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="icon" href="https://moe.gov.sa/ar/PublishingImages/logo.png" type="image/png" />
 </head>
+
 <body>
   <div class="container">
+    <!-- ✅ الهيدر -->
     <div class="header">
-      <img src="https://moe.gov.sa/ar/PublishingImages/logo.png" alt="شعار وزارة التعليم">
+      <img
+        src="https://moe.gov.sa/ar/PublishingImages/logo.png"
+        alt="شعار وزارة التعليم"
+        style="max-height: 70px"
+      />
     </div>
 
     <h2>تحديث بيانات منسق/ة الأمن والسلامة</h2>
 
     <form id="updateForm">
       <label>الرقم الوزاري</label>
-      <input type="text" id="schoolNumber" readonly>
+      <input type="text" id="schoolNumber" readonly />
 
       <label>اسم المدرسة</label>
-      <input type="text" id="schoolName" readonly>
+      <input type="text" id="schoolName" readonly />
 
       <label>جنس المدرسة</label>
-      <input type="text" id="schoolGender" readonly>
+      <input type="text" id="schoolGender" readonly />
 
       <label>المحافظة</label>
-      <input type="text" id="schoolArea" readonly>
+      <input type="text" id="schoolArea" readonly />
 
       <label>اسم مدير المدرسة</label>
-      <input type="text" id="principalName">
+      <input type="text" id="principalName" />
 
       <label>جوال مدير المدرسة</label>
-      <input type="tel" id="principalPhone">
+      <input type="tel" id="principalPhone" inputmode="numeric" />
 
       <label>البريد الإلكتروني للمدرسة</label>
-      <input type="email" id="schoolEmail">
+      <input type="email" id="schoolEmail" />
 
       <label>الملكية</label>
-      <input type="text" id="ownership">
+      <input type="text" id="ownership" />
 
       <label>اسم منسق/ة الأمن والسلامة</label>
-      <input type="text" id="coordinatorName" required>
+      <input type="text" id="coordinatorName" required />
 
       <label>السجل المدني للمنسق/ة</label>
-      <input type="text" id="coordinatorID" required>
+      <input type="text" id="coordinatorID" required inputmode="numeric" />
 
       <label>رقم الجوال للمنسق/ة</label>
-      <input type="tel" id="coordinatorPhone" required>
+      <input type="tel" id="coordinatorPhone" required inputmode="numeric" />
 
       <label>الكادر الوظيفي</label>
-      <input type="text" id="jobType">
+      <input type="text" id="jobType" />
 
       <label>المؤهل العلمي</label>
-      <input type="text" id="qualification">
+      <input type="text" id="qualification" />
 
       <label>المسمى الوظيفي في فارس</label>
-      <input type="text" id="farsTitle">
+      <input type="text" id="farsTitle" />
 
       <label>المستوى / المرتبة</label>
-      <input type="text" id="level">
+      <input type="text" id="level" />
 
       <label>الدرجة</label>
-      <input type="text" id="grade">
+      <input type="text" id="grade" />
 
       <label>رفع قرار تكليف المنسق (PDF)</label>
-      <input type="file" id="assignmentFile" accept="application/pdf">
+      <input type="file" id="assignmentFile" accept="application/pdf" />
 
       <button type="submit" id="saveBtn">تحديث البيانات</button>
     </form>
@@ -77,7 +84,6 @@
     <p id="message" class="msg"></p>
   </div>
 
-  <script type="module" src="script.js"></script>
-
+  <script type="module" src="./script.js"></script>
 </body>
 </html>
