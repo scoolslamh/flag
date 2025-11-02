@@ -10,7 +10,7 @@ const SUPABASE_KEY =
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // 🔗 رابط Google Apps Script (خاص برفع الملف فقط)
-const DRIVE_API ="https://script.google.com/macros/s/AKfycbxuupLpq3JAb8I4Ek2YqQF6Cc6hKfM-aZleyZuveTS79DlJVbYCLLnaoExL__7-SaMLIA/exec";
+const DRIVE_API ="https://script.google.com/macros/s/AKfycbwBEVYtrAhG3ML7Va1OdTw1WUnWbN_pXe4tJivrabkWPIgDEltA5cTK6oi0PYQb2c7pcw/exec";
 
 
 // ============================
@@ -166,19 +166,15 @@ if (data.status === "تم التأكيد") {
 
           try {
             const res = await fetch(DRIVE_API, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                file: base64,
-                coordinatorName: fields.coordinator || "منسق",
-              }),
-            });
-            const result = await res.json();
-            if (result.success) fileUrl = result.url;
-          } catch (err) {
-            console.error("خطأ أثناء رفع الملف:", err);
-          }
-        }
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    file: base64,
+    coordinatorName: fields.coordinator,
+    schoolName: document.getElementById("schoolName").value,
+  }),
+});
+
 
         // 3️⃣ حفظ البيانات في Supabase
         const { error } = await supabase
