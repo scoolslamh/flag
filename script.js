@@ -81,7 +81,7 @@ if (document.getElementById("updateForm")) {
   // ✅ منع الدخول المباشر دون تسجيل
   if (!token || !data.number) {
     alert("الرجاء تسجيل الدخول أولاً.");
-    window.location.href = "login.html";
+    window.location.href = "index.html";
   }
 
   // ✅ زر الخروج

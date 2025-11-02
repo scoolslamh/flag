@@ -25,13 +25,84 @@ body {
 /* ✅ الحاوية */
 .container {
   background: #fff;
-  width: 100%;
-  max-width: 680px;
-  padding: 30px 25px;
-  border-radius: 14px;
-  box-shadow: 0 4px 20px rgba(0, 108, 53, 0.15);
-  transition: 0.3s ease;
+  width: 90%;
+  max-width: 600px;        /* 🔹 عرض مناسب للشاشات الكبيرة */
+  margin: 30px auto;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  text-align: right;
 }
+
+/* ✅ تنسيق النموذج والحقول */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+label {
+  font-weight: 600;
+  color: var(--edu-text);
+  margin-top: 8px;
+}
+
+input, select, textarea {
+  width: 100%;
+  max-width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[readonly] {
+  background: #f2f4f3;
+  color: #333;
+}
+
+/* ✅ تحسين المحاذاة في الصفحة */
+h2 {
+  text-align: center;
+  color: var(--edu-green);
+  margin-bottom: 15px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: var(--edu-green);
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: var(--edu-light);
+  transform: scale(1.02);
+}
+
+/* ✅ للهواتف */
+@media (max-width: 600px) {
+  .container {
+    width: 95%;
+    padding: 20px;
+  }
+
+  input, select {
+    font-size: 14px;
+  }
+
+  h2 {
+    font-size: 16px;
+  }
+}
+
 
 .container:hover {
   box-shadow: 0 6px 25px rgba(0, 108, 53, 0.25);

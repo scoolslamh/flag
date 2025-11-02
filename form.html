@@ -10,7 +10,7 @@
 
 <body>
   <div class="container">
-    <!-- ✅ الهيدر الجديد -->
+    <!-- ✅ الهيدر -->
     <div class="header">
       <h1>قسم الأمن والسلامة والمرافق بتعليم عسير</h1>
     </div>
@@ -20,42 +20,42 @@
     <form id="updateForm" class="form">
       <div class="form-group">
         <label>الرقم الوزاري</label>
-        <input type="text" id="schoolNumber" readonly />
+        <input type="text" id="schoolNumber" readonly required />
       </div>
 
       <div class="form-group">
         <label>اسم المدرسة</label>
-        <input type="text" id="schoolName" readonly />
+        <input type="text" id="schoolName" readonly required />
       </div>
 
       <div class="form-group">
         <label>جنس المدرسة</label>
-        <input type="text" id="schoolGender" readonly />
+        <input type="text" id="schoolGender" readonly required />
       </div>
 
       <div class="form-group">
         <label>المحافظة</label>
-        <input type="text" id="schoolArea" readonly />
+        <input type="text" id="schoolArea" readonly required />
       </div>
 
       <div class="form-group">
         <label>اسم مدير المدرسة</label>
-        <input type="text" id="principalName" />
+        <input type="text" id="principalName" required />
       </div>
 
       <div class="form-group">
         <label>جوال مدير المدرسة</label>
-        <input type="tel" id="principalPhone" inputmode="numeric" />
+        <input type="tel" id="principalPhone" inputmode="numeric" required />
       </div>
 
       <div class="form-group">
         <label>البريد الإلكتروني للمدرسة</label>
-        <input type="email" id="schoolEmail" />
+        <input type="email" id="schoolEmail" required />
       </div>
 
       <div class="form-group">
         <label>الملكية</label>
-        <input type="text" id="ownership" />
+        <input type="text" id="ownership" required />
       </div>
 
       <div class="form-group">
@@ -65,42 +65,53 @@
 
       <div class="form-group">
         <label>السجل المدني للمنسق/ة</label>
-        <input type="text" id="coordinatorID" required inputmode="numeric" />
+        <input type="text" id="coordinatorID" inputmode="numeric" maxlength="10" minlength="10" required />
       </div>
 
       <div class="form-group">
         <label>رقم الجوال للمنسق/ة</label>
-        <input type="tel" id="coordinatorPhone" required inputmode="numeric" />
+        <input type="tel" id="coordinatorPhone" inputmode="numeric" maxlength="10" minlength="10" required />
       </div>
 
       <div class="form-group">
         <label>الكادر الوظيفي</label>
-        <input type="text" id="jobType" />
+        <select id="jobType" required>
+          <option value="">اختر الكادر...</option>
+          <option value="تعليمي">تعليمي</option>
+          <option value="إداري">إداري</option>
+        </select>
       </div>
 
       <div class="form-group">
         <label>المؤهل العلمي</label>
-        <input type="text" id="qualification" />
+        <select id="qualification" required>
+          <option value="">اختر المؤهل...</option>
+          <option value="دكتوراه">دكتوراه</option>
+          <option value="ماجستير">ماجستير</option>
+          <option value="بكالوريوس">بكالوريوس</option>
+          <option value="دبلوم">دبلوم</option>
+          <option value="ثانوي">ثانوي</option>
+        </select>
       </div>
 
       <div class="form-group">
         <label>المسمى الوظيفي في فارس</label>
-        <input type="text" id="farsTitle" />
+        <input type="text" id="farsTitle" required />
       </div>
 
       <div class="form-group">
         <label>المستوى / المرتبة</label>
-        <input type="text" id="level" />
+        <input type="text" id="level" required />
       </div>
 
       <div class="form-group">
         <label>الدرجة</label>
-        <input type="text" id="grade" />
+        <input type="text" id="grade" required />
       </div>
 
       <div class="form-group">
         <label>رفع قرار تكليف المنسق (PDF)</label>
-        <input type="file" id="assignmentFile" accept="application/pdf" />
+        <input type="file" id="assignmentFile" accept="application/pdf" required />
       </div>
 
       <button type="submit" id="saveBtn">تحديث البيانات</button>
@@ -114,6 +125,29 @@
     <p id="message" class="msg"></p>
   </div>
 
-  <script type="module" src="./script.js"></script>
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+    // ✅ تحقق من رقم السجل والجوال قبل الإرسال
+    const form = document.getElementById("updateForm");
+    form.addEventListener("submit", (e) => {
+      const id = document.getElementById("coordinatorID").value.trim();
+      const phone = document.getElementById("coordinatorPhone").value.trim();
+
+      // تحقق من أن السجل المدني = 10 أرقام فقط
+      if (!/^\d{10}$/.test(id)) {
+        alert("❌ يجب أن يكون السجل المدني مكونًا من 10 أرقام.");
+        e.preventDefault();
+        return;
+      }
+
+      // تحقق من أن الجوال يبدأ بـ05 وعدده 10 أرقام
+      if (!/^05\d{8}$/.test(phone)) {
+        alert("❌ رقم الجوال غير صحيح. يجب أن يبدأ بـ 05 ويتكون من 10 أرقام.");
+        e.preventDefault();
+        return;
+      }
+    });
+  </script>
 </body>
 </html>
