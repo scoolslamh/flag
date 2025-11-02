@@ -10,59 +10,66 @@ const SUPABASE_KEY =
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // 🔗 رابط Google Apps Script (خاص برفع الملف فقط)
-const DRIVE_API ="https://script.google.com/macros/s/AKfycbwBEVYtrAhG3ML7Va1OdTw1WUnWbN_pXe4tJivrabkWPIgDEltA5cTK6oi0PYQb2c7pcw/exec";
-
+const DRIVE_API =
+  "https://script.google.com/macros/s/AKfycbwBEVYtrAhG3ML7Va1OdTw1WUnWbN_pXe4tJivrabkWPIgDEltA5cTK6oi0PYQb2c7pcw/exec";
 
 // ============================
-// 🟢 صفحة الدخول (محدثة)
+// 🟢 صفحة الدخول
 // ============================
-if (document.getElementById('loginBtn')) {
-  const loginBtn = document.getElementById('loginBtn');
-  const msg = document.getElementById('message');
+if (document.getElementById("loginBtn")) {
+  const loginBtn = document.getElementById("loginBtn");
+  const msg = document.getElementById("message");
+  const input = document.getElementById("schoolNumber");
 
-  loginBtn.addEventListener('click', async () => {
-    const number = document.getElementById('schoolNumber').value.trim();
-    msg.textContent = '';
+  // ✅ دعم الضغط على Enter
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      loginBtn.click();
+    }
+  });
 
-    // ✅ التحقق من أن الرقم الوزاري يحتوي على 5 أرقام على الأقل
-    const digitsOnly = number.replace(/[^0-9]/g, '');
+  // ✅ عند الضغط على زر الدخول
+  loginBtn.addEventListener("click", async () => {
+    const number = input.value.trim();
+    msg.textContent = "";
+
+    // التحقق من الرقم الوزاري
+    const digitsOnly = number.replace(/[^0-9]/g, "");
     if (digitsOnly.length < 5) {
-      msg.textContent = 'الرقم الوزاري يجب ألا يقل عن 5 أرقام.';
+      msg.textContent = "الرقم الوزاري يجب ألا يقل عن 5 أرقام.";
       return;
     }
 
-    // 🔄 إظهار رسالة تحميل
+    // حالة التحميل
     loginBtn.disabled = true;
-    loginBtn.textContent = 'جاري البحث...';
+    loginBtn.textContent = "جاري البحث...";
 
     try {
-      // ✅ البحث الجزئي داخل الحقل (حتى لو كان الرقم داخل مجموعة مفصولة بشرطة)
+      // البحث الجزئي داخل الحقل
       const { data, error } = await supabase
-        .from('schools')
-        .select('*')
-        .ilike('number', `%${number}%`)
+        .from("schools")
+        .select("*")
+        .ilike("number", `%${number}%`)
         .maybeSingle();
 
       if (error) throw error;
 
       if (data) {
-        localStorage.setItem('schoolData', JSON.stringify(data));
-        window.location.href = 'form.html';
+        localStorage.setItem("schoolData", JSON.stringify(data));
+        window.location.href = "form.html";
       } else {
-        msg.textContent = 'لم يتم العثور على الرقم الوزاري.';
+        msg.textContent = "لم يتم العثور على الرقم الوزاري.";
       }
     } catch (err) {
-      msg.textContent = '⚠️ حدث خطأ في الاتصال بقاعدة البيانات.';
+      msg.textContent = "⚠️ حدث خطأ في الاتصال بقاعدة البيانات.";
       console.error(err);
     } finally {
-      // 🔙 إعادة الزر إلى حالته الأصلية
       loginBtn.disabled = false;
-      loginBtn.textContent = 'دخول';
+      loginBtn.textContent = "دخول";
     }
   });
 }
-
-
 
 // ============================
 // 🟢 صفحة البيانات (form.html)
@@ -74,7 +81,7 @@ if (document.getElementById("updateForm")) {
   if (!data || !data.number) {
     msg.textContent = "الرجاء العودة للصفحة الرئيسية.";
   } else {
-    // ✅ تعبئة الحقول
+    // تعبئة الحقول
     const fill = (id, val, lock = false) => {
       const el = document.getElementById(id);
       if (el) {
@@ -101,20 +108,14 @@ if (document.getElementById("updateForm")) {
     fill("grade", data.grade);
 
     // إذا كانت البيانات مؤكدة مسبقًا
-if (data.status === "تم التأكيد") {
-  document
-    .querySelectorAll("input, select")
-    .forEach((i) => i.setAttribute("readonly", true));
-  document.getElementById("saveBtn").disabled = true;
-  msg.textContent = "تم تأكيد البيانات مسبقًا — عرض فقط.";
-} else {
-  // 🟢 ضع هنا الكود الذي يتعامل مع الحالة العادية
-  document.getElementById("updateForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    document.getElementById("confirmBox").classList.remove("hidden");
-  });
-}
-
+    if (data.status === "تم التأكيد") {
+      document
+        .querySelectorAll("input, select")
+        .forEach((i) => i.setAttribute("readonly", true));
+      document.getElementById("saveBtn").disabled = true;
+      msg.textContent = "تم تأكيد البيانات مسبقًا — عرض فقط.";
+      return;
+    }
 
     // عند الضغط على زر حفظ
     document
@@ -165,27 +166,31 @@ if (data.status === "تم التأكيد") {
           });
 
           try {
-  const res = await fetch(DRIVE_API, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      file: base64,
-      coordinatorName: fields.coordinator || "منسق",
-      schoolName: document.getElementById("schoolName").value || "مدرسة"
-    }),
-  });
+            const res = await fetch(DRIVE_API, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                file: base64,
+                coordinatorName: fields.coordinator || "منسق",
+                schoolName:
+                  document.getElementById("schoolName").value || "مدرسة",
+              }),
+            });
 
-  const result = await res.json();
-  if (result.success) {
-    fileUrl = result.url;
-    msg.textContent = `✅ تم رفع الملف بنجاح. 
-      <a href="${fileUrl}" target="_blank">عرض الملف في Google Drive</a>`;
-  }
+            const result = await res.json();
 
-} catch (err) {
-  console.error("خطأ أثناء رفع الملف:", err);
-  msg.textContent = "❌ حدث خطأ أثناء رفع الملف.";
-}
+            if (result.success) {
+              fileUrl = result.url;
+              msg.innerHTML = `✅ تم رفع الملف بنجاح.<br>
+                <a href="${fileUrl}" target="_blank">عرض الملف في Google Drive</a>`;
+            } else {
+              msg.textContent = "⚠️ لم يتم رفع الملف بنجاح.";
+            }
+          } catch (err) {
+            console.error("خطأ أثناء رفع الملف:", err);
+            msg.textContent = "❌ حدث خطأ أثناء رفع الملف.";
+          }
+        }
 
         // 3️⃣ حفظ البيانات في Supabase
         const { error } = await supabase
@@ -212,4 +217,3 @@ if (data.status === "تم التأكيد") {
       });
   }
 }
- 
