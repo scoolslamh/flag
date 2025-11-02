@@ -7,32 +7,34 @@
 
   <!-- 🔗 ملف التنسيق -->
   <link rel="stylesheet" href="./style.css" />
-
-  <!-- 🧩 أيقونة المتصفح -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="icon" href="https://moe.gov.sa/ar/PublishingImages/logo.png" type="image/png" />
 </head>
 
 <body>
-  <div class="container">
+  <div class="container login-container">
     <!-- ✅ الهيدر -->
     <div class="header">
-      <img
-        src="https://moe.gov.sa/ar/PublishingImages/logo.png"
-        alt="شعار وزارة التعليم"
-        style="max-height: 70px"
-      />
+      <h1>قسم الأمن والسلامة والمرافق</h1>
     </div>
 
     <h2>نظام تحديث بيانات منسقي الأمن والسلامة</h2>
-    <p>الرجاء إدخال الرقم الوزاري للمدرسة</p>
+    <p class="desc">الرجاء إدخال الرقم الوزاري للمدرسة</p>
 
-    <input
-      type="text"
-      id="schoolNumber"
-      placeholder="مثال: 123456 أو 123456-789012"
-      inputmode="numeric"
-    />
+    <div class="input-group">
+      <input
+        type="text"
+        id="schoolNumber"
+        placeholder="مثال: 123456 أو 123456-789012"
+        inputmode="numeric"
+      />
+    </div>
+
     <button id="loginBtn">دخول</button>
+
+    <!-- 🌀 سبنر التحميل -->
+    <div id="spinner" class="spinner hidden"></div>
+
     <p id="message" class="msg"></p>
   </div>
 
@@ -40,4 +42,3 @@
   <script type="module" src="./script.js"></script>
 </body>
 </html>
- 
