@@ -3,15 +3,13 @@
 // ===============================
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const SUPABASE_URL = "https://gtiypqqevuaswzxqgmar.supabase.co";
-const SUPABASE_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0aXlwcXFldnVhc3d6eHFnbWFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwNjIwMTcsImV4cCI6MjA3NzYzODAxN30.pA9fBRZn4VYqBrlaP0tsLNCeE6l-jzrIc0QQYGfuRTk";
+const SUPABASE_URL ="https://gtiypqqevuaswzxqgmar.supabase.co";
+const SUPABASE_KEY ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0aXlwcXFldnVhc3d6eHFnbWFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwNjIwMTcsImV4cCI6MjA3NzYzODAxN30.pA9fBRZn4VYqBrlaP0tsLNCeE6l-jzrIc0QQYGfuRTk";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // 🔗 رابط Google Apps Script (خاص برفع الملف فقط)
-const DRIVE_API =
-  "https://script.google.com/macros/s/AKfycbwBEVYtrAhG3ML7Va1OdTw1WUnWbN_pXe4tJivrabkWPIgDEltA5cTK6oi0PYQb2c7pcw/exec";
+const DRIVE_API ="https://script.google.com/macros/s/AKfycbxioEhn23JekGSDFUbtSzo2MVQQovM0YVxJsTtg96Dli5I-09dMMXDmmaSWxFqT82wABQ/exec";
 
 // ============================
 // 🟢 صفحة الدخول
