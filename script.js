@@ -95,13 +95,14 @@ document.querySelector(".container").prepend(logoutBtn);
 
 logoutBtn.addEventListener("click", () => {
   if (confirm("هل أنت متأكد من تسجيل الخروج؟")) {
+    // 🧹 تنظيف التخزين المحلي
     localStorage.removeItem("login_token");
     localStorage.removeItem("schoolData");
 
     // ✅ التوجيه الصحيح حسب مكان المشروع
     const basePath = window.location.origin.includes("github.io")
-      ? "/munaseg/index.html"
-      : "index.html";
+      ? "/munaseg/index.html" // عند النشر على GitHub Pages
+      : "index.html"; // عند التشغيل محليًا
 
     window.location.href = basePath;
   }
