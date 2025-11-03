@@ -95,7 +95,7 @@ if (document.getElementById("updateForm")) {
     if (confirm("هل أنت متأكد من تسجيل الخروج؟")) {
       localStorage.removeItem("login_token");
       localStorage.removeItem("schoolData");
-      window.location.href = "login.html";
+      window.location.href = "index.html";
     }
   });
 
