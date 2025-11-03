@@ -242,6 +242,5 @@ logoutBtn.addEventListener("click", () => {
           console.error("⚠️ فشل الحفظ:", err);
           msg.textContent = "⚠️ حدث خطأ أثناء حفظ البيانات.";
         }
-      });
-  }
-}
+      }); // ← إغلاق form.html
+      }); // ← إغلاق login.html
