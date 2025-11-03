@@ -125,10 +125,12 @@ applyFilterBtn.addEventListener("click", () => {
 });
 
 // 🟢 تصدير البيانات إلى Excel (CSV)
+// 🟢 تصدير البيانات إلى Excel (XLSX منسق)
 document.getElementById("exportBtn").addEventListener("click", () => {
   const selectedArea = filterArea.value;
   const selectedStatus = filterStatus.value;
 
+  // فلترة البيانات حسب الاختيار
   let filtered = [...allData];
   if (selectedArea !== "all") filtered = filtered.filter((r) => r.area === selectedArea);
   if (selectedStatus === "تم التأكيد") filtered = filtered.filter((r) => r.status === "تم التأكيد");
@@ -139,18 +141,29 @@ document.getElementById("exportBtn").addEventListener("click", () => {
     return;
   }
 
-  const headers = Object.keys(filtered[0]).join(",");
-  const rows = filtered.map((r) => Object.values(r).join(","));
-  const csv = [headers, ...rows].join("\n");
+  // تجهيز البيانات لتكون جدول مرتب
+  const sheetData = [];
+  const headers = Object.keys(filtered[0]);
+  sheetData.push(headers);
 
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "schools_data_filtered.csv";
-  a.click();
-  URL.revokeObjectURL(url);
+  filtered.forEach((row) => {
+    const values = headers.map((key) => row[key] || "");
+    sheetData.push(values);
+  });
+
+  // إنشاء ملف Excel
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet(sheetData);
+
+  // تنسيق الأعمدة لتناسب اللغة العربية
+  ws["!cols"] = headers.map(() => ({ wch: 25 }));
+
+  XLSX.utils.book_append_sheet(wb, ws, "المدارس");
+  XLSX.writeFile(wb, "البيانات_المدارس.xlsx");
+
+  msg.textContent = "✅ تم تصدير البيانات بنجاح إلى Excel.";
 });
+
 
 // 🟢 زر الخروج
 document.getElementById("logoutBtn").addEventListener("click", () => {
