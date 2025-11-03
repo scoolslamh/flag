@@ -26,13 +26,13 @@ body {
 .container {
   background: #fff;
   width: 90%;
-  max-width: 600px;        /* 🔹 عرض مناسب للشاشات الكبيرة */
-  margin: 30px auto;
+  max-width: 550px; /* ← كانت 650px، قللناها لتصبح أنحف */
   padding: 25px;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  text-align: right;
+  margin: 20px auto;
 }
+
 
 /* ✅ تنسيق النموذج والحقول */
 form {
@@ -291,4 +291,26 @@ button:active {
   font-size: 1.6em;
   margin-top: 8px;
   color: #006c35;
+}
+.form-group {
+  margin-bottom: 12px;
+}
+
+input, select {
+  width: 95%; /* تقليل العرض داخل الكونتينر */
+  margin: auto;
+  display: block;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+  color: var(--edu-text);
+  text-align: right;
 }
