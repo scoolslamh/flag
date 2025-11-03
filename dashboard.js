@@ -18,21 +18,40 @@ let chartInstance = null;
 let allData = [];
 
 // 🟢 تحميل البيانات الأولية
+// 🟢 تحميل جميع البيانات بدون حد (على دفعات)
 async function loadAllData() {
-  msg.textContent = "⏳ جاري تحميل البيانات...";
-  try {
-    const { data, error } = await supabase.from("schools").select("*", { count: "exact" });
-    if (error) throw error;
+  msg.textContent = "⏳ جاري تحميل كل البيانات من قاعدة Supabase...";
+  let from = 0;
+  const limit = 1000; // الحد الأقصى في كل دفعة
+  let allRows = [];
 
-    allData = data;
-    fillAreaFilter(data);
-    updateDashboard(data);
+  try {
+    while (true) {
+      const { data, error, count } = await supabase
+        .from("schools")
+        .select("*", { count: "exact" })
+        .range(from, from + limit - 1);
+
+      if (error) throw error;
+
+      allRows = allRows.concat(data);
+
+      if (data.length < limit) break; // تم الوصول للنهاية
+      from += limit; // انتقل إلى الدفعة التالية
+    }
+
+    console.log(`✅ تم تحميل ${allRows.length} صف من Supabase`);
+
+    allData = allRows;
+    fillAreaFilter(allRows);
+    updateDashboard(allRows);
     msg.textContent = "";
   } catch (err) {
-    console.error(err);
+    console.error("⚠️ خطأ أثناء تحميل البيانات:", err);
     msg.textContent = "⚠️ حدث خطأ أثناء تحميل البيانات.";
   }
 }
+
 
 // 🟢 تعبئة قائمة المحافظات
 function fillAreaFilter(data) {
