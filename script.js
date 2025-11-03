@@ -8,18 +8,17 @@ const SUPABASE_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0aXlwcXFldnVhc3d6eHFnbWFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwNjIwMTcsImV4cCI6MjA3NzYzODAxN30.pA9fBRZn4VYqBrlaP0tsLNCeE6l-jzrIc0QQYGfuRTk";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-// 🔗 رابط Cloudflare Worker لرفع الملف
 const DRIVE_API = "https://proud-limit-0aff.alsalamh11234.workers.dev/";
 
 // =================================================
-// 🟢 صفحة تسجيل الدخول (login.html)
+// 🟢 صفحة تسجيل الدخول (index.html)
 // =================================================
 if (document.getElementById("loginBtn")) {
   const loginBtn = document.getElementById("loginBtn");
   const msg = document.getElementById("message");
   const input = document.getElementById("schoolNumber");
   const spinner = document.getElementById("spinner");
+
   // ✅ دعم الضغط على Enter للدخول
   input.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
@@ -30,47 +29,47 @@ if (document.getElementById("loginBtn")) {
 
   // ✅ عند الضغط على زر الدخول
   loginBtn.addEventListener("click", async () => {
-  const number = input.value.trim();
-  msg.textContent = "";
+    const number = input.value.trim();
+    msg.textContent = "";
 
-  const digitsOnly = number.replace(/[^0-9]/g, "");
-  if (digitsOnly.length < 5) {
-    msg.textContent = "الرقم الوزاري يجب ألا يقل عن 5 أرقام.";
-    return;
-  }
-
-  // ✅ عرض حالة التحميل
-  loginBtn.disabled = true;
-  loginBtn.textContent = "جاري البحث...";
-  spinner?.classList.remove("hidden");
-
-  try {
-    const { data, error } = await supabase
-      .from("schools")
-      .select("*")
-      .ilike("number", `%${number}%`)
-      .maybeSingle();
-
-    if (error) throw error;
-
-    if (data) {
-      localStorage.setItem("schoolData", JSON.stringify(data));
-      localStorage.setItem("login_token", "active");
-      window.location.href = "form.html";
-    } else {
-      msg.textContent = "❌ لم يتم العثور على الرقم الوزاري.";
+    const digitsOnly = number.replace(/[^0-9]/g, "");
+    if (digitsOnly.length < 5) {
+      msg.textContent = "الرقم الوزاري يجب ألا يقل عن 5 أرقام.";
+      return;
     }
-  } catch (err) {
-    console.error("⚠️ خطأ في الاتصال:", err);
-    msg.textContent = "⚠️ حدث خطأ أثناء الاتصال بقاعدة البيانات.";
-  } finally {
-    // ✅ إيقاف التحميل في جميع الحالات
-    loginBtn.disabled = false;
-    loginBtn.textContent = "دخول";
-    spinner?.classList.add("hidden");
-  }
-});
 
+    // ✅ عرض حالة التحميل
+    loginBtn.disabled = true;
+    loginBtn.textContent = "جاري البحث...";
+    spinner?.classList.remove("hidden");
+
+    try {
+      const { data, error } = await supabase
+        .from("schools")
+        .select("*")
+        .ilike("number", `%${number}%`)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (data) {
+        localStorage.setItem("schoolData", JSON.stringify(data));
+        localStorage.setItem("login_token", "active");
+        window.location.href = "form.html";
+      } else {
+        msg.textContent = "❌ لم يتم العثور على الرقم الوزاري.";
+      }
+    } catch (err) {
+      console.error("⚠️ خطأ في الاتصال:", err);
+      msg.textContent = "⚠️ حدث خطأ أثناء الاتصال بقاعدة البيانات.";
+    } finally {
+      // ✅ إيقاف التحميل في جميع الحالات
+      loginBtn.disabled = false;
+      loginBtn.textContent = "دخول";
+      spinner?.classList.add("hidden");
+    }
+  });
+}
 
 // =================================================
 // 🟢 صفحة البيانات (form.html)
@@ -87,27 +86,26 @@ if (document.getElementById("updateForm")) {
   }
 
   // ✅ زر الخروج
-const logoutBtn = document.createElement("button");
-logoutBtn.textContent = "🚪 تسجيل الخروج";
-logoutBtn.style.cssText =
-  "background:#d9534f;color:#fff;border:none;padding:10px 15px;border-radius:8px;font-weight:bold;cursor:pointer;margin-bottom:15px;width:100%;";
-document.querySelector(".container").prepend(logoutBtn);
+  const logoutBtn = document.createElement("button");
+  logoutBtn.textContent = "🚪 تسجيل الخروج";
+  logoutBtn.style.cssText =
+    "background:#d9534f;color:#fff;border:none;padding:10px 15px;border-radius:8px;font-weight:bold;cursor:pointer;margin-bottom:15px;width:100%;";
+  document.querySelector(".container").prepend(logoutBtn);
 
-logoutBtn.addEventListener("click", () => {
-  if (confirm("هل أنت متأكد من تسجيل الخروج؟")) {
-    // 🧹 تنظيف التخزين المحلي
-    localStorage.removeItem("login_token");
-    localStorage.removeItem("schoolData");
+  logoutBtn.addEventListener("click", () => {
+    if (confirm("هل أنت متأكد من تسجيل الخروج؟")) {
+      // 🧹 تنظيف التخزين المحلي
+      localStorage.removeItem("login_token");
+      localStorage.removeItem("schoolData");
 
-    // ✅ التوجيه الصحيح حسب مكان المشروع
-    const basePath = window.location.origin.includes("github.io")
-      ? "/munaseg/index.html" // عند النشر على GitHub Pages
-      : "index.html"; // عند التشغيل محليًا
+      // ✅ التوجيه الصحيح حسب مكان المشروع
+      const basePath = window.location.origin.includes("github.io")
+        ? "/munaseg/index.html" // عند النشر على GitHub Pages
+        : "index.html"; // عند التشغيل محليًا
 
-    window.location.href = basePath;
-  }
-});
-
+      window.location.href = basePath;
+    }
+  });
 
   // ✅ تعبئة البيانات في الحقول
   const fill = (id, val, lock = false) => {
@@ -165,8 +163,7 @@ logoutBtn.addEventListener("click", () => {
           ownership: document.getElementById("ownership").value,
           coordinator: document.getElementById("coordinatorName").value,
           coordinator_id: document.getElementById("coordinatorID").value,
-          coordinator_phone:
-            document.getElementById("coordinatorPhone").value,
+          coordinator_phone: document.getElementById("coordinatorPhone").value,
           job_type: document.getElementById("jobType").value,
           qualification: document.getElementById("qualification").value,
           fars_title: document.getElementById("farsTitle").value,
@@ -242,5 +239,6 @@ logoutBtn.addEventListener("click", () => {
           console.error("⚠️ فشل الحفظ:", err);
           msg.textContent = "⚠️ حدث خطأ أثناء حفظ البيانات.";
         }
-      }); // ← إغلاق form.html
-      }); // ← إغلاق login.html
+      });
+  }
+}
