@@ -306,6 +306,20 @@ input, select {
   font-family: 'Tajawal', sans-serif;
   font-size: 15px;
 }
+textarea {
+  width: 95%;
+  margin: auto;
+  display: block;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+  resize: vertical; /* يمكن المستخدم من توسيع الحقل عموديًا */
+  line-height: 1.6;
+  background: #f9f9f9;
+  white-space: pre-wrap; /* لعرض النص الطويل بأسطر متعددة */
+}
 
 label {
   display: block;
