@@ -30,45 +30,47 @@ if (document.getElementById("loginBtn")) {
 
   // ✅ عند الضغط على زر الدخول
   loginBtn.addEventListener("click", async () => {
-    const number = input.value.trim();
-    msg.textContent = "";
+  const number = input.value.trim();
+  msg.textContent = "";
 
-    const digitsOnly = number.replace(/[^0-9]/g, "");
-    if (digitsOnly.length < 5) {
-      msg.textContent = "الرقم الوزاري يجب ألا يقل عن 5 أرقام.";
-      return;
+  const digitsOnly = number.replace(/[^0-9]/g, "");
+  if (digitsOnly.length < 5) {
+    msg.textContent = "الرقم الوزاري يجب ألا يقل عن 5 أرقام.";
+    return;
+  }
+
+  // ✅ عرض حالة التحميل
+  loginBtn.disabled = true;
+  loginBtn.textContent = "جاري البحث...";
+  spinner?.classList.remove("hidden");
+
+  try {
+    const { data, error } = await supabase
+      .from("schools")
+      .select("*")
+      .ilike("number", `%${number}%`)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    if (data) {
+      localStorage.setItem("schoolData", JSON.stringify(data));
+      localStorage.setItem("login_token", "active");
+      window.location.href = "form.html";
+    } else {
+      msg.textContent = "❌ لم يتم العثور على الرقم الوزاري.";
     }
+  } catch (err) {
+    console.error("⚠️ خطأ في الاتصال:", err);
+    msg.textContent = "⚠️ حدث خطأ أثناء الاتصال بقاعدة البيانات.";
+  } finally {
+    // ✅ إيقاف التحميل في جميع الحالات
+    loginBtn.disabled = false;
+    loginBtn.textContent = "دخول";
+    spinner?.classList.add("hidden");
+  }
+});
 
-    loginBtn.disabled = true;
-    loginBtn.textContent = "جاري البحث...";
-    spinner.classList.remove("hidden");
-
-
-    try {
-      const { data, error } = await supabase
-        .from("schools")
-        .select("*")
-        .ilike("number", `%${number}%`)
-        .maybeSingle();
-
-      if (error) throw error;
-
-      if (data) {
-        localStorage.setItem("schoolData", JSON.stringify(data));
-        localStorage.setItem("login_token", "active");
-        window.location.href = "form.html";
-      } else {
-        msg.textContent = "لم يتم العثور على الرقم الوزاري.";
-      }
-    } catch (err) {
-      console.error("⚠️ خطأ في الاتصال:", err);
-      msg.textContent = "⚠️ حدث خطأ أثناء الاتصال بقاعدة البيانات.";
-    } finally {
-      loginBtn.disabled = false;
-      loginBtn.textContent = "دخول";
-    }
-  });
-}
 
 // =================================================
 // 🟢 صفحة البيانات (form.html)
@@ -85,19 +87,26 @@ if (document.getElementById("updateForm")) {
   }
 
   // ✅ زر الخروج
-  const logoutBtn = document.createElement("button");
-  logoutBtn.textContent = "🚪 تسجيل الخروج";
-  logoutBtn.style.cssText =
-    "background:#d9534f;color:#fff;border:none;padding:10px 15px;border-radius:8px;font-weight:bold;cursor:pointer;margin-bottom:15px;width:100%;";
-  document.querySelector(".container").prepend(logoutBtn);
+const logoutBtn = document.createElement("button");
+logoutBtn.textContent = "🚪 تسجيل الخروج";
+logoutBtn.style.cssText =
+  "background:#d9534f;color:#fff;border:none;padding:10px 15px;border-radius:8px;font-weight:bold;cursor:pointer;margin-bottom:15px;width:100%;";
+document.querySelector(".container").prepend(logoutBtn);
 
-  logoutBtn.addEventListener("click", () => {
-    if (confirm("هل أنت متأكد من تسجيل الخروج؟")) {
-      localStorage.removeItem("login_token");
-      localStorage.removeItem("schoolData");
-      window.location.href = "index.html";
-    }
-  });
+logoutBtn.addEventListener("click", () => {
+  if (confirm("هل أنت متأكد من تسجيل الخروج؟")) {
+    localStorage.removeItem("login_token");
+    localStorage.removeItem("schoolData");
+
+    // ✅ التوجيه الصحيح حسب مكان المشروع
+    const basePath = window.location.origin.includes("github.io")
+      ? "/munaseg/index.html"
+      : "index.html";
+
+    window.location.href = basePath;
+  }
+});
+
 
   // ✅ تعبئة البيانات في الحقول
   const fill = (id, val, lock = false) => {
