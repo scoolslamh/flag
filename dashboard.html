@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>لوحة الإحصائيات</title>
+  <title>لوحة إحصاءات تحديث البيانات</title>
   <link rel="stylesheet" href="./style.css" />
   <link rel="icon" href="https://moe.gov.sa/ar/PublishingImages/logo.png" type="image/png" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -13,6 +13,22 @@
   <div class="container">
     <h1 style="text-align:center;color:#006c35;">📊 لوحة إحصاءات تحديث البيانات</h1>
     <button id="logoutBtn" style="background:#d9534f;color:#fff;border:none;padding:10px 15px;border-radius:8px;font-weight:bold;cursor:pointer;margin-bottom:15px;width:100%;">🚪 تسجيل الخروج</button>
+
+    <div class="filters">
+      <label>المحافظة:</label>
+      <select id="filterArea">
+        <option value="all">الكل</option>
+      </select>
+
+      <label>الحالة:</label>
+      <select id="filterStatus">
+        <option value="all">الكل</option>
+        <option value="تم التأكيد">تم التحديث</option>
+        <option value="غير محدث">لم يتم التحديث</option>
+      </select>
+
+      <button id="applyFilter">تطبيق الفلاتر</button>
+    </div>
 
     <div id="statsBox" class="stats">
       <div class="card">إجمالي المدارس <span id="totalCount">0</span></div>
