@@ -1,28 +1,19 @@
-// ==========================================
-// ✅ إعدادات عامة
-// ==========================================
-
-// رابط Google Apps Script
+// ✅ الرابط المحدث لسكربت قوقل (الحساب الجديد)
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxiXu4I-sjchK6Y7UQ0iok5Sv0eopdQqZbL3vmXNeda4EKfBxLlHZyZPtoxZF6GDbZAag/exec";
 
-// Proxy لتجاوز CORS (لـ GET فقط)
-const PROXY = "https://api.allorigins.win/raw?url=";
-
+// 🛑 تم إلغاء الـ PROXY لأنه يسبب خطأ 520 وفشل في قراءة الـ JSON
 
 // ==========================================
 // 🔵 1. منطق صفحة الدخول (index.html)
 // ==========================================
 if (document.getElementById("loginBtn")) {
-
     const loginBtn = document.getElementById("loginBtn");
     const input = document.getElementById("schoolNumber");
     const msg = document.getElementById("message");
     const spinner = document.getElementById("loadingSpinner");
 
     loginBtn.addEventListener("click", async () => {
-
         const num = input.value.trim();
-
         if (!num) {
             msg.textContent = "⚠️ يرجى إدخال الرقم الوزاري";
             msg.style.color = "red";
@@ -34,17 +25,21 @@ if (document.getElementById("loginBtn")) {
         if (spinner) spinner.classList.remove("hidden");
 
         try {
-            const targetUrl = `${SCRIPT_URL}?number=${num}&t=${Date.now()}`;
-            const finalUrl = PROXY + encodeURIComponent(targetUrl);
+            // ✨ التعديل: الاتصال المباشر بقوقل مع وضع "cors" واتباع التوجيه
+            const finalUrl = `${SCRIPT_URL}?number=${num}&t=${Date.now()}`;
+            
+            const response = await fetch(finalUrl, {
+                method: "GET",
+                redirect: "follow" // إلزامي لسكربت قوقل
+            });
 
-            const response = await fetch(finalUrl);
             const text = await response.text();
-
             let result;
             try {
                 result = JSON.parse(text);
-            } catch {
-                throw new Error("الاستجابة ليست JSON");
+            } catch (err) {
+                // إذا فشل التحويل، فالمشكلة غالباً في إعدادات النشر (Deployment)
+                throw new Error("الاستجابة من السيرفر غير صالحة. تأكد من نشر السكربت كـ Anyone.");
             }
 
             if (result.success) {
@@ -58,7 +53,7 @@ if (document.getElementById("loginBtn")) {
 
         } catch (error) {
             console.error("Login Error:", error);
-            msg.textContent = "⚠️ تعذر الاتصال بالخادم. حاول لاحقًا.";
+            msg.textContent = "⚠️ فشل الاتصال. تأكد من تفعيل إضافة CORS في المتصفح.";
             msg.style.color = "red";
             resetLogin();
         }
@@ -71,18 +66,15 @@ if (document.getElementById("loginBtn")) {
     });
 }
 
-
 // ==========================================
 // 🟢 2. منطق صفحة البيانات (form.html)
 // ==========================================
 if (document.getElementById("mainUpdateForm")) {
-
     const schoolData = JSON.parse(localStorage.getItem("schoolData"));
 
     if (!schoolData) {
         window.location.href = "index.html";
     } else {
-
         document.getElementById("schoolDisplayName").textContent = schoolData.school_name || "";
         document.getElementById("areaDisplayName").textContent = schoolData.area || "";
         document.getElementById("principalName").value = schoolData.principal || "";
@@ -91,7 +83,6 @@ if (document.getElementById("mainUpdateForm")) {
         document.getElementById("schoolAddress").value = schoolData.address || "";
 
         const form = document.getElementById("mainUpdateForm");
-
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
 
@@ -128,8 +119,7 @@ if (document.getElementById("mainUpdateForm")) {
                 window.location.href = "declaration.html";
 
             } catch (err) {
-                console.error("Form Error:", err);
-                alert("⚠️ حدث خطأ أثناء معالجة البيانات");
+                alert("⚠️ حدث خطأ أثناء معالجة الصور");
                 submitBtn.disabled = false;
                 submitBtn.textContent = "التالي";
                 if (spinner) spinner.classList.add("hidden");
@@ -138,17 +128,13 @@ if (document.getElementById("mainUpdateForm")) {
     }
 }
 
-
 // ==========================================
-// ✍️ 3. منطق صفحة الإقرار والتوقيع (declaration.html)
+// ✍️ 3. منطق صفحة الإقرار (declaration.html)
 // ==========================================
 if (document.getElementById("signature-pad")) {
-
     const canvas = document.getElementById("signature-pad");
     const signaturePad = new SignaturePad(canvas, {
-        minWidth: 1.5,
-        maxWidth: 4,
-        penColor: "rgb(0, 0, 128)"
+        minWidth: 1.5, maxWidth: 4, penColor: "rgb(0, 0, 128)"
     });
 
     const schoolInfo = JSON.parse(localStorage.getItem("schoolData"));
@@ -157,13 +143,11 @@ if (document.getElementById("signature-pad")) {
     if (!schoolInfo || !formData) {
         window.location.href = "index.html";
     } else {
-
-        document.getElementById("schoolInfo").textContent =
-            `${schoolInfo.school_name} - ${schoolInfo.number}`;
-
+        document.getElementById("schoolInfo").textContent = `${schoolInfo.school_name} - ${schoolInfo.number}`;
         document.getElementById("schoolNameShow").textContent = schoolInfo.school_name;
         document.getElementById("principalNameShow").textContent = formData.principal;
 
+        // تعبئة الحقول لضمان الإرسال الصافي للقالب
         document.getElementById("finalSchoolName").value = schoolInfo.school_name;
         document.getElementById("finalPrincipalName").value = formData.principal;
 
@@ -181,7 +165,6 @@ if (document.getElementById("signature-pad")) {
         document.getElementById("clearBtn").onclick = () => signaturePad.clear();
 
         document.getElementById("submitAllBtn").onclick = async () => {
-
             if (signaturePad.isEmpty()) {
                 alert("⚠️ يرجى التوقيع قبل الإرسال");
                 return;
@@ -193,6 +176,7 @@ if (document.getElementById("signature-pad")) {
             btn.disabled = true;
             if (spinner) spinner.classList.remove("hidden");
 
+            // ✨ إرسال الأسماء نصياً لضمان الكتابة في القالب
             const payload = {
                 ...formData,
                 signature: signaturePad.toDataURL().split(",")[1],
@@ -204,8 +188,7 @@ if (document.getElementById("signature-pad")) {
             try {
                 await fetch(SCRIPT_URL, {
                     method: "POST",
-                    mode: "no-cors",
-                    headers: { "Content-Type": "application/json" },
+                    mode: "no-cors", // وضع no-cors ضروري للإرسال من localhost
                     body: JSON.stringify(payload)
                 });
 
@@ -214,7 +197,6 @@ if (document.getElementById("signature-pad")) {
                 window.location.href = "index.html";
 
             } catch (e) {
-                console.error("Submit Error:", e);
                 alert("❌ فشل الإرسال");
                 btn.disabled = false;
                 if (spinner) spinner.classList.add("hidden");
