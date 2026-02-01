@@ -1,5 +1,5 @@
 // ✅ الرابط المحدث لسكربت قوقل (الحساب الجديد)
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxl1UDfnAA2DA5gKDxEY3PZbnSEUIrpeFdpsW5fHTzc5o6ciDGBPTCXtp65FBUmy1MC2g/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx1_xZaPHomeGg40rrPAokN68-4nKVMi3IvBdOnVWOt2S4NSsZhQykdmf-yhBLMkizHgw/exec";
 
 // ==========================================
 // 🔵 1. منطق صفحة الدخول (index.html)
@@ -39,6 +39,9 @@ if (document.getElementById("loginBtn")) {
             } catch (err) {
                 throw new Error("الاستجابة من السيرفر غير صالحة.");
             }
+
+            // ✅ التعديل الجديد: إخفاء السبنر فوراً عند استلام رد ناجح من السيرفر
+            if (spinner) spinner.classList.add("hidden");
 
             if (result.success) {
                 // ✨ إضافة ميزة منع التكرار وعرض التقرير السابق
@@ -219,4 +222,13 @@ if (document.getElementById("signature-pad")) {
             }
         };
     }
+}
+// دالة الخروج الموحدة لجميع الصفحات
+if (document.getElementById("logoutBtn")) {
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+        if (confirm("هل أنت متأكد من تسجيل الخروج؟ سيتم مسح البيانات غير المحفوظة.")) {
+            localStorage.clear(); // مسح الذاكرة المحلية نهائياً
+            window.location.href = "index.html"; // العودة لصفحة الدخول
+        }
+    });
 }
