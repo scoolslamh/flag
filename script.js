@@ -113,15 +113,42 @@ if (document.getElementById("mainUpdateForm")) {
             submitBtn.textContent = "⏳ جاري المعالجة...";
             if (spinner) spinner.classList.remove("hidden");
 
+            // 📸 دالة مطورة لتصغير وضغط الصور قبل الرفع لضمان عملها من الجوال
             const getBase64 = (file) => new Promise((resolve, reject) => {
                 if (!file) return resolve("");
+                
                 const reader = new FileReader();
-                reader.onload = () => resolve(reader.result.split(",")[1]);
-                reader.onerror = reject;
                 reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+
+                        // تحديد أقصى عرض (1200px) للحفاظ على توازن الجودة والحجم
+                        const MAX_WIDTH = 1200;
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        // ضغط الصورة بنسبة 70% لتحويل حجمها من ميجابايت إلى كيلوبايت
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                        resolve(compressedBase64.split(",")[1]);
+                    };
+                };
+                reader.onerror = error => reject(error);
             });
 
             try {
+                // تجميع البيانات مع الصور المضغوطة
                 const payload = {
                     principal: document.getElementById("principalName").value,
                     principalPhone: document.getElementById("principalPhone").value,
@@ -135,11 +162,13 @@ if (document.getElementById("mainUpdateForm")) {
                     imgKings: await getBase64(document.getElementById("imgKings").files[0])
                 };
 
+                // حفظ البيانات في الذاكرة المحلية والانتقال لصفحة الإقرار
                 localStorage.setItem("fullFormPayload", JSON.stringify(payload));
                 window.location.href = "declaration.html";
 
             } catch (err) {
-                alert("⚠️ حدث خطأ أثناء معالجة الصور");
+                console.error("Image Processing Error:", err);
+                alert("⚠️ حدث خطأ أثناء معالجة الصور، تأكد من جودة اتصال الإنترنت.");
                 submitBtn.disabled = false;
                 submitBtn.textContent = "التالي";
                 if (spinner) spinner.classList.add("hidden");
@@ -147,7 +176,6 @@ if (document.getElementById("mainUpdateForm")) {
         });
     }
 }
-
 // ==========================================
 // ✍️ 3. منطق صفحة الإقرار (declaration.html)
 // ==========================================
