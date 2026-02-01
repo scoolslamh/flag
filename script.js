@@ -1,7 +1,5 @@
 // ✅ الرابط المحدث لسكربت قوقل (الحساب الجديد)
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxiXu4I-sjchK6Y7UQ0iok5Sv0eopdQqZbL3vmXNeda4EKfBxLlHZyZPtoxZF6GDbZAag/exec";
-
-// 🛑 تم إلغاء الـ PROXY لأنه يسبب خطأ 520 وفشل في قراءة الـ JSON
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxl1UDfnAA2DA5gKDxEY3PZbnSEUIrpeFdpsW5fHTzc5o6ciDGBPTCXtp65FBUmy1MC2g/exec";
 
 // ==========================================
 // 🔵 1. منطق صفحة الدخول (index.html)
@@ -23,14 +21,15 @@ if (document.getElementById("loginBtn")) {
         loginBtn.disabled = true;
         loginBtn.textContent = "جاري التحقق...";
         if (spinner) spinner.classList.remove("hidden");
+        msg.textContent = ""; // تنظيف الرسائل السابقة
 
         try {
-            // ✨ التعديل: الاتصال المباشر بقوقل مع وضع "cors" واتباع التوجيه
+            // الاتصال المباشر بقوقل مع إضافة طابع زمني لمنع الكاش
             const finalUrl = `${SCRIPT_URL}?number=${num}&t=${Date.now()}`;
             
             const response = await fetch(finalUrl, {
                 method: "GET",
-                redirect: "follow" // إلزامي لسكربت قوقل
+                redirect: "follow"
             });
 
             const text = await response.text();
@@ -38,13 +37,30 @@ if (document.getElementById("loginBtn")) {
             try {
                 result = JSON.parse(text);
             } catch (err) {
-                // إذا فشل التحويل، فالمشكلة غالباً في إعدادات النشر (Deployment)
-                throw new Error("الاستجابة من السيرفر غير صالحة. تأكد من نشر السكربت كـ Anyone.");
+                throw new Error("الاستجابة من السيرفر غير صالحة.");
             }
 
             if (result.success) {
-                localStorage.setItem("schoolData", JSON.stringify(result.data));
-                window.location.href = "form.html";
+                // ✨ إضافة ميزة منع التكرار وعرض التقرير السابق
+                if (result.alreadySubmitted) {
+                    msg.innerHTML = `
+                        <div style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba; margin-bottom: 15px;">
+                            ⚠️ تم تعبئة البيانات مسبقاً لهذه المدرسة.<br><br>
+                            <a href="${result.pdfUrl}" target="_blank" 
+                               style="display: inline-block; background: #155724; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-weight: bold;">
+                               📥 تحميل التقرير السابق (PDF)
+                            </a>
+                        </div>
+                    `;
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = "دخول مرة أخرى";
+                    // تخزين البيانات في حال رغب المستخدم في الدخول مرة أخرى للمراجعة
+                    localStorage.setItem("schoolData", JSON.stringify(result.data));
+                } else {
+                    // إذا لم يتم التعبئة مسبقاً، التوجه لصفحة النموذج مباشرة
+                    localStorage.setItem("schoolData", JSON.stringify(result.data));
+                    window.location.href = "form.html";
+                }
             } else {
                 msg.textContent = "❌ الرقم الوزاري غير موجود في السجلات.";
                 msg.style.color = "red";
@@ -53,7 +69,7 @@ if (document.getElementById("loginBtn")) {
 
         } catch (error) {
             console.error("Login Error:", error);
-            msg.textContent = "⚠️ فشل الاتصال. تأكد من تفعيل إضافة CORS في المتصفح.";
+            msg.textContent = "⚠️ تعذر الاتصال بالخادم. تأكد من تفعيل CORS أو جرب متصفحاً آخر.";
             msg.style.color = "red";
             resetLogin();
         }
@@ -75,6 +91,7 @@ if (document.getElementById("mainUpdateForm")) {
     if (!schoolData) {
         window.location.href = "index.html";
     } else {
+        // تعبئة البيانات التلقائية
         document.getElementById("schoolDisplayName").textContent = schoolData.school_name || "";
         document.getElementById("areaDisplayName").textContent = schoolData.area || "";
         document.getElementById("principalName").value = schoolData.principal || "";
@@ -147,9 +164,9 @@ if (document.getElementById("signature-pad")) {
         document.getElementById("schoolNameShow").textContent = schoolInfo.school_name;
         document.getElementById("principalNameShow").textContent = formData.principal;
 
-        // تعبئة الحقول لضمان الإرسال الصافي للقالب
-        document.getElementById("finalSchoolName").value = schoolInfo.school_name;
-        document.getElementById("finalPrincipalName").value = formData.principal;
+        // تعبئة الحقول المخفية للنموذج
+        if (document.getElementById("finalSchoolName")) document.getElementById("finalSchoolName").value = schoolInfo.school_name;
+        if (document.getElementById("finalPrincipalName")) document.getElementById("finalPrincipalName").value = formData.principal;
 
         function resizeCanvas() {
             const ratio = Math.max(window.devicePixelRatio || 1, 1);
@@ -176,7 +193,6 @@ if (document.getElementById("signature-pad")) {
             btn.disabled = true;
             if (spinner) spinner.classList.remove("hidden");
 
-            // ✨ إرسال الأسماء نصياً لضمان الكتابة في القالب
             const payload = {
                 ...formData,
                 signature: signaturePad.toDataURL().split(",")[1],
@@ -188,7 +204,7 @@ if (document.getElementById("signature-pad")) {
             try {
                 await fetch(SCRIPT_URL, {
                     method: "POST",
-                    mode: "no-cors", // وضع no-cors ضروري للإرسال من localhost
+                    mode: "no-cors",
                     body: JSON.stringify(payload)
                 });
 
