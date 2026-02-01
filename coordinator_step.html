@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>نظام العلم وصور ولاة الأمر - تعليم عسير</title>
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="icon" href="https://moe.gov.sa/ar/PublishingImages/logo.png" type="image/png" />
+  <style>
+    .message-box {
+      background: #ffffff;
+      padding: 20px;
+      border-right: 6px solid var(--edu-green);
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      font-size: 15px;
+      line-height: 1.8;
+      margin-bottom: 25px;
+      text-align: justify;
+      color: var(--edu-text);
+    }
+    .download-link:hover {
+      background: var(--edu-light) !important;
+      transform: translateY(-2px);
+    }
+    input[type="file"] {
+      background: #f8f9fa;
+      border: 2px dashed var(--edu-light);
+      padding: 15px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>قسم الأمن والسلامة والمرافق بتعليم عسير</h1>
+    </div>
+
+    <div class="message-box">
+      <p>المكرم / مدير/ة مدرسة <br> <strong>السلام عليكم ورحمة الله وبركاته،،</strong></p>
+      <p>
+        بناء على ما وردنا من تعاميم وتوجيهات من الجهات المختصة، والمتعلقة بضرورة الالتزام بما صدر من الأنظمة والتعليمات، فيما يتعلق برفع الصور الرسمية لولاة الأمر – حفظهم الله – وفق الصيغ المعتمدة، والالتزام بما نصّ عليه نظام العلم الصادر بالمرسوم الملكي، وما ورد في الأمر السامي الكريم وقرارات ديوان مجلس الوزراء ذات الصلة.
+      </p>
+      <p>
+        ونظراً لأهمية التقيد التام بهذه التوجيهات، وحرصًا على تطبيق الأنظمة والتعليمات المعتمدة، نأمل منكم التأكد من الالتزام الكامل بما ورد أعلاه، ومعالجة أي ملاحظات – إن وجدت – بشكل عاجل، واتخاذ ما يلزم من إجراءات تنظيمية وتصحيحية حيال ذلك.
+      </p>
+      <p>
+        كما نأمل تزويدنا بما يفيد التحقق من الالتزام، من خلال تعبئة النموذج ورفع الصور للعلم وصور ولاة الأمر من خلال هذه الصفحة.
+      </p>
+      
+      <a href="https://drive.google.com/drive/folders/1oUUx7YOIOyAHE27k5TB6cmDlIT-_Pcbr?usp=sharing" 
+         target="_blank" 
+         class="download-link" 
+         style="display: block; text-align: center; background: #13344F; color: white; padding: 12px; border-radius: 8px; text-decoration: none; margin-top: 15px; font-weight: bold; transition: 0.3s;">
+        📂 تحميل: نظام العلم السعودي وصور ولاة الأمر
+      </a>
+    </div>
+
+    <form id="evidenceForm" class="form">
+      
+      <div class="form-group">
+        <label>1- صور ولاة الأمر</label>
+        <select id="statusKings" required>
+          <option value="">اختر الحالة...</option>
+          <option value="ملتزم">ملتزم</option>
+          <option value="غير ملتزم">غير ملتزم</option>
+          <option value="يوجد ملاحظات">يوجد ملاحظات</option>
+        </select>
+        <textarea id="noteKings" placeholder="أدخل الملاحظات إن وجدت حول صور ولاة الأمر..." rows="2"></textarea>
+        
+        <label style="color: var(--edu-green); margin-top: 10px;">📷 تصوير صور ولاة الأمر (كاميرا مباشرة)</label>
+        <input type="file" id="imgKings" accept="image/*" capture="environment" required onfocus="this.value=''" />
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+      <div class="form-group">
+        <label>2- العلم السعودي</label>
+        <select id="statusFlag" required>
+          <option value="">اختر الحالة...</option>
+          <option value="ملتزم">ملتزم</option>
+          <option value="غير ملتزم">غير ملتزم</option>
+          <option value="يوجد ملاحظات">يوجد ملاحظات</option>
+        </select>
+        <textarea id="noteFlag" placeholder="أدخل الملاحظات إن وجدت حول العلم..." rows="2"></textarea>
+        
+        <label style="color: var(--edu-green); margin-top: 10px;">📷 تصوير العلم السعودي (كاميرا مباشرة)</label>
+        <input type="file" id="imgFlag" accept="image/*" capture="environment" required onfocus="this.value=''" />
+      </div>
+
+      <div class="form-group" style="background: #eef7f3; padding: 15px; border-radius: 10px; border: 1px solid #d4edda; margin-top: 20px;">
+        <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer; font-size: 14px;">
+          <input type="checkbox" id="acknowledgment" required style="width: 20px; height: 20px; accent-color: var(--edu-green);">
+          <span>أقر أنا مدير/ة المدرسة بالاطلاع على الأنظمة والتعليمات المرفقة والالتزام الكامل بما ورد فيها ومعالجة الملاحظات فوراً.</span>
+        </label>
+      </div>
+
+      <button type="submit" id="submitAll" style="margin-top: 25px; font-size: 18px;">تأكيد وإرسال التقرير النهائي</button>
+    </form>
+    
+    <p id="message" class="msg"></p>
+  </div>
+
+  <script type="module" src="./script.js"></script>
+</body>
+</html>

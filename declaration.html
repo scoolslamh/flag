@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>إقرار مدير المدرسة - نظام المتابعة</title>
+    <link rel="stylesheet" href="style.css?v=1.3">
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <style>
+        .hidden-data-fields { display: none; }
+        .acknowledgment-text span { border-bottom: 1px solid #ddd; padding: 0 5px; font-weight: bold; color: var(--primary-color); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hidden-data-fields">
+            <input type="text" id="finalSchoolName">
+            <input type="text" id="finalPrincipalName">
+        </div>
+
+        <div class="header">
+            <h1>وثيقة الإقرار الإلكتروني</h1>
+            <p id="schoolInfo">جاري تحميل البيانات...</p>
+        </div>
+
+        <div class="section acknowledgment-text">
+            <h3>📝 نص الإقرار</h3>
+            <p>
+                أقرّ أنا مدير مدرسة (<span id="schoolNameShow">...</span>) 
+                بأنني اطّلعت على ما ورد في التعاميم والتوجيهات الصادرة من الجهات المختصة، والمتعلقة بالالتزام بالأنظمة والتعليمات المعتمدة، بما يتعلق برفع الصور الرسمية لولاة الأمر – حفظهم الله – وفق الصيغ المعتمدة، والالتزام بما نصّ عليه نظام العلم، وما ورد في الأوامر السامية وقرارات ديوان مجلس الوزراء ذات الصلة. 
+                <br><br>
+                وأتعهد بالالتزام التام بما ورد في تلك التوجيهات، والعمل على تطبيقها داخل المدرسة، ومعالجة أي ملاحظات فنيّة بشكل فوري.
+            </p>
+            
+            <div style="margin-top: 20px; text-align: center; border-top: 1px dashed #eee; padding-top: 15px;">
+                <p style="margin-bottom: 5px;">مدير المدرسة</p>
+                <span id="principalNameShow">...</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>✍️ التوقيع الإلكتروني (بالإصبع أو القلم)</h3>
+            <div class="signature-container">
+                <canvas id="signature-pad"></canvas>
+            </div>
+            <div style="text-align: left; margin-top: 10px;">
+                <button type="button" id="clearBtn" class="btn-secondary">إعادة التوقيع</button>
+            </div>
+        </div>
+
+        <div class="actions" style="margin-top: 30px;">
+            <button type="button" id="submitAllBtn" class="btn-primary">إرسال الإقرار والبيانات النهائية</button>
+            <div id="loadingSpinner" class="spinner hidden"></div>
+            <p id="statusMsg" class="msg"></p>
+        </div>
+    </div>
+
+    <script src="script.js?v=1.4"></script>
+</body>
+</html>

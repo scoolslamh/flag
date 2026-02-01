@@ -1,120 +1,84 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>تحديث بيانات المدرسة</title>
-  <link rel="stylesheet" href="./style.css" />
-  <link rel="icon" href="https://moe.gov.sa/ar/PublishingImages/logo.png" type="image/png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تعبئة البيانات - تعليم عسير</title>
+    <link rel="stylesheet" href="style.css?v=1.4">
 </head>
-
 <body>
-  <div class="container">
-    <!-- ✅ الهيدر الجديد -->
-    <div class="header">
-      <h1>قسم الأمن والسلامة والمرافق بتعليم عسير</h1>
+    <div class="container">
+        <div class="header">
+            <h2 id="schoolDisplayName">جاري تحميل الاسم...</h2>
+            <p id="areaDisplayName">المحافظة</p>
+        </div>
+
+        <form id="mainUpdateForm">
+            <div class="section-title">بيانات التواصل والمدير</div>
+            
+            <div class="form-group">
+                <label>اسم مدير/ة المدرسة</label>
+                <input type="text" id="principalName" placeholder="الاسم الثلاثي" required>
+            </div>
+
+            <div class="form-group">
+                <label>رقم جوال مدير/ة المدرسة</label>
+                <input type="tel" id="principalPhone" placeholder="05xxxxxxxx" required pattern="05[0-9]{8}">
+            </div>
+
+            <div class="form-group">
+                <label>العنوان (الحي - الشارع)</label>
+                <input type="text" id="schoolAddress" placeholder="مثال: حي الموظفين - شارع العام" required>
+            </div>
+
+            <div class="form-group">
+                <label>الإيميل الرسمي للمدرسة</label>
+                <input type="email" id="schoolEmail" placeholder="sch123@moe.gov.sa" required>
+            </div>
+
+            <hr>
+
+            <div class="section-title">تقرير الالتزام (تصوير مباشر)</div>
+
+            <div class="form-group">
+                <label>1- صور ولاة الأمر</label>
+                <select id="kingsStatus" required>
+                    <option value="">اختر الحالة...</option>
+                    <option value="ملتزم">ملتزم</option>
+                    <option value="غير ملتزم">غير ملتزم</option>
+                    <option value="يوجد ملاحظات">يوجد ملاحظات</option>
+                </select>
+                <textarea id="kingsNotes" placeholder="أضف ملاحظاتك هنا في حال وجودها..."></textarea>
+                <label class="file-label">📸 رفع صورة ولاة الأمر:</label>
+                <input type="file" id="imgKings" accept="image/*" capture="environment" required>
+            </div>
+
+            <div class="form-group">
+                <label>2- العلم السعودي</label>
+                <select id="flagStatus" required>
+                    <option value="">اختر الحالة...</option>
+                    <option value="ملتزم">ملتزم</option>
+                    <option value="غير ملتزم">غير ملتزم</option>
+                    <option value="يوجد ملاحظات">يوجد ملاحظات</option>
+                </select>
+                <textarea id="flagNotes" placeholder="أضف ملاحظاتك هنا في حال وجودها..."></textarea>
+                <label class="file-label">📸 رفع صورة العلم:</label>
+                <input type="file" id="imgFlag" accept="image/*" capture="environment" required>
+            </div>
+
+            <div class="acknowledgment-box">
+                <input type="checkbox" id="finalAck" required>
+                <label for="finalAck">أقر بصحة البيانات الموضحة أعلاه والالتزام بالأنظمة والمعايير المعتمدة.</label>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-primary">التالي: الانتقال للإقرار والتوقيع</button>
+            
+            <div id="loadingSpinner" class="spinner hidden"></div>
+        </form>
+        
+        <p id="message" class="msg"></p>
     </div>
 
-    <h2>تحديث بيانات منسق/ة الأمن والسلامة</h2>
-
-    <form id="updateForm" class="form">
-      <div class="form-group">
-        <label>الرقم الوزاري</label>
-        <input type="text" id="schoolNumber" readonly />
-      </div>
-
-      <div class="form-group">
-        <label>اسم المدرسة</label>
-        <textarea id="schoolName" readonly rows="2"></textarea>
-      </div>
-
-
-      <div class="form-group">
-        <label>جنس المدرسة</label>
-        <input type="text" id="schoolGender" readonly />
-      </div>
-
-      <div class="form-group">
-        <label>المحافظة</label>
-        <input type="text" id="schoolArea" readonly />
-      </div>
-
-      <div class="form-group">
-        <label>اسم مدير المدرسة</label>
-        <input type="text" id="principalName" />
-      </div>
-
-      <div class="form-group">
-        <label>جوال مدير المدرسة</label>
-        <input type="tel" id="principalPhone" inputmode="numeric" />
-      </div>
-
-      <div class="form-group">
-        <label>البريد الإلكتروني للمدرسة</label>
-        <input type="email" id="schoolEmail" />
-      </div>
-
-      <div class="form-group">
-        <label>الملكية</label>
-        <input type="text" id="ownership" />
-      </div>
-
-      <div class="form-group">
-        <label>اسم منسق/ة الأمن والسلامة</label>
-        <input type="text" id="coordinatorName" required />
-      </div>
-
-      <div class="form-group">
-        <label>السجل المدني للمنسق/ة</label>
-        <input type="text" id="coordinatorID" required inputmode="numeric" />
-      </div>
-
-      <div class="form-group">
-        <label>رقم الجوال للمنسق/ة</label>
-        <input type="tel" id="coordinatorPhone" required inputmode="numeric" />
-      </div>
-
-      <div class="form-group">
-        <label>الكادر الوظيفي</label>
-        <input type="text" id="jobType" />
-      </div>
-
-      <div class="form-group">
-        <label>المؤهل العلمي</label>
-        <input type="text" id="qualification" />
-      </div>
-
-      <div class="form-group">
-        <label>المسمى الوظيفي في فارس</label>
-        <input type="text" id="farsTitle" />
-      </div>
-
-      <div class="form-group">
-        <label>المستوى / المرتبة</label>
-        <input type="text" id="level" />
-      </div>
-
-      <div class="form-group">
-        <label>الدرجة</label>
-        <input type="text" id="grade" />
-      </div>
-
-      <div class="form-group">
-        <label>رفع صورة قرار تكليف مدير المدرسة للمنسق (PDF)</label>
-        <input type="file" id="assignmentFile" accept="application/pdf" />
-      </div>
-
-      <button type="submit" id="saveBtn">تحديث البيانات</button>
-    </form>
-
-    <div id="confirmBox" class="hidden">
-      <p>أقر بصحة ودقة جميع البيانات التي تم إدخالها.</p>
-      <button id="confirmBtn">تأكيد وإرسال</button>
-    </div>
-
-    <p id="message" class="msg"></p>
-  </div>
-
-  <script type="module" src="./script.js"></script>
+    <script src="script.js?v=1.4"></script>
 </body>
 </html>

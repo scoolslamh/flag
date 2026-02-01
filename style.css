@@ -1,330 +1,255 @@
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
 
-/* 🎯 ألوان وهوية قسم الأمن والسلامة والمرافق */
+/* 🎯 المتغيرات المحدثة للهوية البصرية (وزارة التعليم) */
 :root {
-  --edu-green: #006c35;
-  --edu-light: #00907f;
-  --edu-bg: #f6f9f7;
-  --edu-text: #13344F;
-  --edu-gray: #e8ecea;
+  --primary-color: #006c35;      /* أخضر الوزارة الرسمي */
+  --secondary-color: #00907f;    /* أخضر فاتح للتفاعلات */
+  --accent-gold: #d4af37;        /* لمسة ذهبية خفيفة للتميز */
+  --bg-color: #f8fafb;           /* خلفية هادئة مريحة للعين */
+  --text-dark: #1e293b;          /* لون نصوص داكن وعصري */
+  --text-light: #64748b;         /* لون نصوص فرعي */
+  --white: #ffffff;
+  --error: #ef4444;
+  --success: #10b981;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+  --shadow-md: 0 10px 25px -5px rgba(0,0,0,0.1);
+  --radius: 20px;
 }
 
-/* ✅ الجسم العام */
+/* ✅ الإعدادات العامة */
+* {
+  box-sizing: border-box;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   font-family: 'Tajawal', sans-serif;
-  background: var(--edu-bg);
+  background-color: var(--bg-color);
+  background-image: radial-gradient(#cbd5e1 0.5px, transparent 0.5px);
+  background-size: 30px 30px;
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
   margin: 0;
-  padding: 15px;
-  color: var(--edu-text);
+  padding: 20px;
+  color: var(--text-dark);
 }
 
-/* ✅ الحاوية */
+/* ✅ الحاوية (البطاقة الرئيسية) */
 .container {
-  background: #fff;
-  width: 90%;
-  max-width: 550px; /* ← كانت 650px، قللناها لتصبح أنحف */
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  margin: 20px auto;
+  background: var(--white);
+  width: 100%;
+  max-width: 550px;
+  padding: 40px 30px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  border: 1px solid #e2e8f0;
 }
 
+/* ✅ الهيدر (رأس الصفحة) */
+.header {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: var(--white);
+  text-align: center;
+  padding: 30px 20px;
+  border-radius: 15px;
+  margin-bottom: 35px;
+  position: relative;
+  overflow: hidden;
+}
 
-/* ✅ تنسيق النموذج والحقول */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+.header::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 150px;
+  height: 150px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+}
+
+.header h1, .header h2 {
+  font-size: 20px;
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.header p {
+  margin: 8px 0 0;
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+/* ✅ العناوين الجانبية */
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 30px 0 15px;
+  padding-right: 12px;
+  border-right: 4px solid var(--accent-gold);
+  display: block;
+}
+
+/* ✅ المجموعات والحقول */
+.form-group {
+  margin-bottom: 22px;
 }
 
 label {
+  display: block;
+  margin-bottom: 10px;
   font-weight: 600;
-  color: var(--edu-text);
-  margin-top: 8px;
+  font-size: 14px;
+  color: var(--text-dark);
+  text-align: right;
 }
 
 input, select, textarea {
   width: 100%;
-  max-width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  padding: 14px 18px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
   font-family: 'Tajawal', sans-serif;
   font-size: 15px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  background: #fdfdfd;
+  color: var(--text-dark);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: right;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--secondary-color);
+  background: var(--white);
+  box-shadow: 0 0 0 4px rgba(0, 144, 127, 0.1);
 }
 
 input[readonly] {
-  background: #f2f4f3;
-  color: #333;
-}
-
-/* ✅ تحسين المحاذاة في الصفحة */
-h2 {
-  text-align: center;
-  color: var(--edu-green);
-  margin-bottom: 15px;
-}
-
-button {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  background: var(--edu-green);
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-button:hover {
-  background: var(--edu-light);
-  transform: scale(1.02);
-}
-
-/* ✅ للهواتف */
-@media (max-width: 600px) {
-  .container {
-    width: 95%;
-    padding: 20px;
-  }
-
-  input, select {
-    font-size: 14px;
-  }
-
-  h2 {
-    font-size: 16px;
-  }
-}
-
-
-.container:hover {
-  box-shadow: 0 6px 25px rgba(0, 108, 53, 0.25);
-}
-
-/* ✅ الهيدر */
-.header {
-  background: linear-gradient(135deg, var(--edu-green), var(--edu-light));
-  color: #fff;
-  text-align: center;
-  padding: 18px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-}
-
-.header h1 {
-  font-size: 20px;
-  margin: 0;
-  letter-spacing: 0.5px;
-}
-
-/* ✅ العنوان الرئيسي */
-h2 {
-  color: var(--edu-green);
-  margin-bottom: 15px;
-  text-align: center;
-  font-size: 18px;
-}
-
-/* ✅ تنسيق عناصر النموذج */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-label {
-  font-weight: 600;
-  color: var(--edu-text);
-  margin-top: 4px;
-}
-
-input, select {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-family: 'Tajawal', sans-serif;
-  font-size: 15px;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-input:focus, select:focus {
-  border-color: var(--edu-light);
-  outline: none;
-  box-shadow: 0 0 4px rgba(0, 144, 127, 0.3);
-}
-
-input[readonly] {
-  background: var(--edu-gray);
+  background: #f1f5f9;
+  color: #64748b;
   cursor: not-allowed;
 }
 
 /* ✅ الأزرار */
-button {
-  background: var(--edu-green);
-  color: #fff;
-  padding: 14px;
-  border: none;
-  border-radius: 8px;
-  margin-top: 20px;
-  font-weight: 700;
-  font-size: 16px;
+.btn-primary {
   width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  background: var(--primary-color);
+  color: var(--white);
+  font-size: 16px;
+  font-weight: 700;
   cursor: pointer;
-  transition: 0.3s ease;
-}
-
-button:hover {
-  background: var(--edu-light);
-  transform: scale(1.02);
-}
-
-button:active {
-  transform: scale(0.98);
-}
-
-/* ✅ رسائل التأكيد أو الخطأ */
-.msg {
-  text-align: center;
-  margin-top: 12px;
-  font-weight: 600;
-  color: var(--edu-green);
-}
-
-/* ✅ مربع التأكيد */
-#confirmBox {
-  background: #fff;
-  border: 2px solid var(--edu-green);
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 108, 53, 0.2);
   margin-top: 15px;
 }
 
-#confirmBox p {
-  margin-bottom: 10px;
-  color: var(--edu-text);
+.btn-primary:hover {
+  background: var(--secondary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 108, 53, 0.3);
 }
 
-.hidden {
-  display: none;
+.btn-secondary {
+  background: #94a3b8;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-family: 'Tajawal';
+  cursor: pointer;
+  margin-top: 10px;
 }
 
-/* ✅ تحسين العرض على الجوال */
-@media (max-width: 600px) {
+/* ✅ صندوق التعليمات وزر التحميل */
+.instruction-box {
+  background-color: #f0fdf4;
+  border-right: 5px solid var(--primary-color);
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+
+.btn-download-main {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary-color) 0%, #166534 100%);
+  color: white;
+  text-decoration: none;
+  padding: 14px 24px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.btn-download-main .icon {
+  font-size: 1.2rem;
+  margin-left: 10px;
+}
+
+/* ✅ التوقيع الإلكتروني */
+.signature-container {
+  width: 100%;
+  height: 220px;
+  border: 2px dashed #cbd5e1;
+  border-radius: 15px;
+  background-color: #ffffff;
+  margin: 15px auto;
+  position: relative;
+  touch-action: none; /* لمنع السكرول أثناء التوقيع */
+}
+
+#signature-pad {
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  cursor: crosshair;
+}
+
+/* ✅ تنبيهات الحالة */
+.msg {
+  text-align: center;
+  padding: 12px;
+  border-radius: 10px;
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ✅ الهواتف الذكية */
+@media (max-width: 480px) {
+  body { padding: 10px; }
   .container {
-    padding: 20px;
+    padding: 30px 20px;
+    border-radius: 15px;
   }
-
-  h2 {
-    font-size: 16px;
-  }
-
-  button {
-    font-size: 15px;
-  }
+  .header h1 { font-size: 17px; }
+  .btn-download-main { font-size: 13px; }
 }
 
-/* ✅ تحسين خاص للأجهزة الصغيرة جدًا */
-@media (max-width: 400px) {
-  .container {
-    padding: 15px;
-  }
-
-  .header h1 {
-    font-size: 18px;
-  }
-
-  input, select {
-    font-size: 14px;
-    padding: 8px;
-  }
-}
-/* 🌀 سبنر التحميل */
+/* ✅ سبنر الانتظار */
 .spinner {
-  margin: 20px auto 0;
-  border: 5px solid #e0e0e0;
-  border-top: 5px solid var(--edu-light);
+  width: 30px;
+  height: 30px;
+  border: 3px solid #e2e8f0;
+  border-top-color: var(--primary-color);
   border-radius: 50%;
-  width: 45px;
-  height: 45px;
+  margin: 20px auto;
   animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+@keyframes spin { to { transform: rotate(360deg); } }
 
 .hidden {
-  display: none !important;
-}
-.stats {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin: 20px 0;
-}
-
-.card {
-  flex: 1;
-  background: #e8f5e9;
-  border-radius: 10px;
-  padding: 15px;
-  text-align: center;
-  font-weight: bold;
-  color: #13344f;
-}
-
-.card.success { background: #d4edda; color: #155724; }
-.card.warning { background: #fff3cd; color: #856404; }
-
-.card span {
-  display: block;
-  font-size: 1.6em;
-  margin-top: 8px;
-  color: #006c35;
-}
-.form-group {
-  margin-bottom: 12px;
-}
-
-input, select {
-  width: 95%; /* تقليل العرض داخل الكونتينر */
-  margin: auto;
-  display: block;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-family: 'Tajawal', sans-serif;
-  font-size: 15px;
-}
-textarea {
-  width: 95%;
-  margin: auto;
-  display: block;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-family: 'Tajawal', sans-serif;
-  font-size: 15px;
-  resize: vertical; /* يمكن المستخدم من توسيع الحقل عموديًا */
-  line-height: 1.6;
-  background: #f9f9f9;
-  white-space: pre-wrap; /* لعرض النص الطويل بأسطر متعددة */
-}
-
-label {
-  display: block;
-  margin-bottom: 4px;
-  font-weight: 600;
-  color: var(--edu-text);
-  text-align: right;
+    display: none !important;
 }
