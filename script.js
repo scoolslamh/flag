@@ -40,11 +40,11 @@ if (document.getElementById("loginBtn")) {
                 throw new Error("الاستجابة من السيرفر غير صالحة.");
             }
 
-            // ✅ التعديل الجديد: إخفاء السبنر فوراً عند استلام رد ناجح من السيرفر
+            // ✅ إخفاء السبنر فوراً عند استلام رد ناجح من السيرفر
             if (spinner) spinner.classList.add("hidden");
 
             if (result.success) {
-                // ✨ إضافة ميزة منع التكرار وعرض التقرير السابق
+                // ✨ ميزة منع التكرار وعرض التقرير السابق
                 if (result.alreadySubmitted) {
                     msg.innerHTML = `
                         <div style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba; margin-bottom: 15px;">
@@ -139,7 +139,7 @@ if (document.getElementById("mainUpdateForm")) {
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
 
-                        // ضغط الصورة بنسبة 70% لتحويل حجمها من ميجابايت إلى كيلوبايت
+                        // ضغط الصورة بنسبة 70% لتقليل حجم الطلب
                         const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
                         resolve(compressedBase64.split(",")[1]);
                     };
@@ -176,6 +176,7 @@ if (document.getElementById("mainUpdateForm")) {
         });
     }
 }
+
 // ==========================================
 // ✍️ 3. منطق صفحة الإقرار (declaration.html)
 // ==========================================
@@ -233,6 +234,7 @@ if (document.getElementById("signature-pad")) {
             };
 
             try {
+                // الإرسال النهائي لسكربت قوقل
                 await fetch(SCRIPT_URL, {
                     method: "POST",
                     mode: "no-cors",
@@ -251,7 +253,10 @@ if (document.getElementById("signature-pad")) {
         };
     }
 }
-// دالة الخروج الموحدة لجميع الصفحات
+
+// ==========================================
+// ↩️ دالة الخروج الموحدة لجميع الصفحات
+// ==========================================
 if (document.getElementById("logoutBtn")) {
     document.getElementById("logoutBtn").addEventListener("click", () => {
         if (confirm("هل أنت متأكد من تسجيل الخروج؟ سيتم مسح البيانات غير المحفوظة.")) {
