@@ -1,48 +1,124 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>لوحة إحصاءات تحديث البيانات</title>
-  <link rel="stylesheet" href="./style.css" />
-  <link rel="icon" href="https://moe.gov.sa/ar/PublishingImages/logo.png" type="image/png" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم المتابعة - تعليم عسير</title>
+    <link rel="stylesheet" href="style.css?v=1.5">
+    <style>
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .card { padding: 20px; border-radius: 12px; text-align: center; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .bg-total { background: #007bff; } .bg-boys { background: #28a745; } .bg-girls { background: #e83e8c; }
+        .bg-done { background: #ffc107; color: #333; } .bg-pending { background: #dc3545; }
+        .progress-container { background: #f0f0f0; border-radius: 10px; height: 30px; margin: 20px 0; overflow: hidden; position: relative; }
+        .progress-bar { background: #155724; height: 100%; transition: width 0.5s ease-in-out; }
+        .progress-text { position: absolute; width: 100%; text-align: center; top: 5px; font-weight: bold; color: #000; }
+        select { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #ddd; margin-bottom: 20px; font-size: 1rem; }
+        .download-section { text-align: center; margin-top: 20px; }
+        .btn-download { background: #17a2b8; color: white; padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
+        .btn-download:disabled { background: #ccc; cursor: not-allowed; }
+    </style>
 </head>
-
 <body>
-  <div class="container">
-    <h1 style="text-align:center;color:#006c35;">📊 لوحة إحصاءات تحديث البيانات</h1>
-    <button id="logoutBtn" style="background:#d9534f;color:#fff;border:none;padding:10px 15px;border-radius:8px;font-weight:bold;cursor:pointer;margin-bottom:15px;width:100%;">🚪 تسجيل الخروج</button>
+    <div class="container">
+        <div class="header">
+            <h1>📊 لوحة إحصائيات المتابعة</h1>
+            <p>قسم الأمن والسلامة والمرافق</p>
+        </div>
 
-    <div class="filters">
-      <label>المحافظة:</label>
-      <select id="filterArea">
-        <option value="all">الكل</option>
-      </select>
+        <label>اختر المشرف المتابع:</label>
+        <select id="supervisorSelect">
+            <option value="all">كل المشرفين</option>
+        </select>
 
-      <label>الحالة:</label>
-      <select id="filterStatus">
-        <option value="all">الكل</option>
-        <option value="تم التأكيد">تم التحديث</option>
-        <option value="غير محدث">لم يتم التحديث</option>
-      </select>
+        <div class="stats-grid">
+            <div class="card bg-total"><h4>الكلي</h4><h2 id="totalCount">0</h2></div>
+            <div class="card bg-boys"><h4>بنين</h4><h2 id="boysCount">0</h2></div>
+            <div class="card bg-girls"><h4>بنات</h4><h2 id="girlsCount">0</h2></div>
+            <div class="card bg-done"><h4>مكتمل</h4><h2 id="doneCount">0</h2></div>
+            <div class="card bg-pending"><h4>متبقي</h4><h2 id="pendingCount">0</h2></div>
+        </div>
 
-      <button id="applyFilter">تطبيق الفلاتر</button>
+        <div class="section">
+            <h3>📈 نسبة الإنجاز الإجمالية</h3>
+            <div class="progress-container">
+                <div id="progressBar" class="progress-bar" style="width: 0%"></div>
+                <div id="progressText" class="progress-text">0%</div>
+            </div>
+        </div>
+
+        <div class="download-section">
+            <button id="downloadBtn" class="btn-download" disabled>📥 تنزيل قائمة المدارس غير المنجزة</button>
+        </div>
+
+        <div id="loadingSpinner" class="spinner hidden"></div>
     </div>
 
-    <div id="statsBox" class="stats">
-      <div class="card">إجمالي المدارس <span id="totalCount">0</span></div>
-      <div class="card success">تم التحديث <span id="updatedCount">0</span></div>
-      <div class="card warning">متبقية <span id="remainingCount">0</span></div>
-    </div>
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx1_xZaPHomeGg40rrPAokN68-4nKVMi3IvBdOnVWOt2S4NSsZhQykdmf-yhBLMkizHgw/exec";
+        let currentPendingList = [];
 
-    <canvas id="areaChart" style="margin-top:20px;"></canvas>
+        async function fetchStats(supervisor = "all") {
+            const spinner = document.getElementById("loadingSpinner");
+            spinner.classList.remove("hidden");
+            
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=getStats&supervisor=${encodeURIComponent(supervisor)}`);
+                const data = await response.json();
+                
+                // تحديث الأرقام
+                document.getElementById("totalCount").textContent = data.total;
+                document.getElementById("boysCount").textContent = data.boys;
+                document.getElementById("girlsCount").textContent = data.girls;
+                document.getElementById("doneCount").textContent = data.completed;
+                document.getElementById("pendingCount").textContent = data.pending;
+                
+                // تحديث شريط التقدم
+                const percent = data.total > 0 ? Math.round((data.completed / data.total) * 100) : 0;
+                document.getElementById("progressBar").style.width = percent + "%";
+                document.getElementById("progressText").textContent = percent + "%";
+                
+                // تحديث قائمة المشرفين (مرة واحدة فقط)
+                if (document.getElementById("supervisorSelect").options.length === 1) {
+                    data.supervisors.forEach(s => {
+                        let opt = document.createElement("option");
+                        opt.value = s; opt.textContent = s;
+                        document.getElementById("supervisorSelect").appendChild(opt);
+                    });
+                }
 
-    <button id="exportBtn" style="margin-top:25px;">📤 تصدير البيانات إلى Excel</button>
-    <p id="message" class="msg"></p>
-  </div>
+                // حفظ قائمة المتعثرين للتنزيل
+                currentPendingList = data.pendingList;
+                document.getElementById("downloadBtn").disabled = currentPendingList.length === 0;
 
-  <script type="module" src="./dashboard.js"></script>
+            } catch (e) {
+                alert("خطأ في جلب البيانات");
+            } finally {
+                spinner.classList.add("hidden");
+            }
+        }
+
+        // دالة تنزيل ملف CSV
+        document.getElementById("downloadBtn").onclick = () => {
+            if (currentPendingList.length === 0) return;
+            
+            let csvContent = "\ufeffاسم المدرسة,الرقم الوزاري,المدير,الجوال\n";
+            currentPendingList.forEach(row => {
+                csvContent += `${row.name},${row.number},${row.principal},${row.phone}\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `متعثرين_${document.getElementById("supervisorSelect").value}.csv`);
+            link.click();
+        };
+
+        document.getElementById("supervisorSelect").onchange = (e) => fetchStats(e.target.value);
+
+        // تحميل البيانات عند فتح الصفحة
+        window.onload = () => fetchStats();
+    </script>
 </body>
 </html>
