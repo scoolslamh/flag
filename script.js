@@ -221,17 +221,8 @@ if (document.getElementById("signature-pad")) {
 
             const btn = document.getElementById("submitAllBtn");
             const spinner = document.getElementById("loadingSpinner");
-            const canvas = document.getElementById("signature-pad");
 
-            // 🔒 1. تعطيل حقل التوقيع ومنع الكتابة فوراً
-            signaturePad.off(); 
-            canvas.style.opacity = "0.5"; // جعل التوقيع باهت للإشارة إلى القفل
-            canvas.style.pointerEvents = "none"; // منع أي لمس برمجياً
-
-            // 2. تعطيل الأزرار ومنع التفاعل مع الصفحة
             btn.disabled = true;
-            btn.style.opacity = "0.6";
-            btn.textContent = "⏳ جاري الحفظ النهائي...";
             if (spinner) spinner.classList.remove("hidden");
 
             const payload = {
@@ -255,16 +246,13 @@ if (document.getElementById("signature-pad")) {
                 window.location.href = "index.html";
 
             } catch (e) {
-                alert("❌ فشل الإرسال، حاول مرة أخرى.");
-                // في حالة الخطأ فقط نعيد تفعيل التوقيع
-                signaturePad.on();
-                canvas.style.opacity = "1";
-                canvas.style.pointerEvents = "auto";
+                alert("❌ فشل الإرسال");
                 btn.disabled = false;
-                btn.textContent = "اعتماد الإقرار والبيانات النهائية";
                 if (spinner) spinner.classList.add("hidden");
             }
         };
+    }
+}
 
 // ==========================================
 // ↩️ دالة الخروج الموحدة لجميع الصفحات
