@@ -4,19 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة تحكم المتابعة - تعليم عسير</title>
-    <link rel="stylesheet" href="style.css?v=1.5">
+    <link rel="stylesheet" href="style.css?v=1.6">
     <style>
+        /* تنسيقات الشبكة والكروت */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
         .card { padding: 20px; border-radius: 12px; text-align: center; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .bg-total { background: #007bff; } .bg-boys { background: #28a745; } .bg-girls { background: #e83e8c; }
         .bg-done { background: #ffc107; color: #333; } .bg-pending { background: #dc3545; }
+        
+        /* تنسيقات شريط التقدم */
         .progress-container { background: #f0f0f0; border-radius: 10px; height: 30px; margin: 20px 0; overflow: hidden; position: relative; }
         .progress-bar { background: #155724; height: 100%; transition: width 0.5s ease-in-out; }
         .progress-text { position: absolute; width: 100%; text-align: center; top: 5px; font-weight: bold; color: #000; }
+        
+        /* تنسيقات القائمة والجدول المطور بالإطار */
         select { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #ddd; margin-bottom: 20px; font-size: 1rem; }
-        .download-section { text-align: center; margin-top: 20px; }
-        .btn-download { background: #17a2b8; color: white; padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
-        .btn-download:disabled { background: #ccc; cursor: not-allowed; }
+        
+        .table-container { 
+            margin-top: 30px; 
+            background: white; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            display: none; 
+            
+            /* تفعيل الإطار والتمرير الداخلي */
+            max-height: 500px; 
+            overflow-y: auto; 
+            border: 1px solid #eee;
+        }
+
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        
+        /* تثبيت رأس الجدول أثناء التمرير */
+        th { 
+            background-color: #f8f9fa; 
+            color: #333; 
+            position: sticky; 
+            top: 0; 
+            z-index: 10; 
+            border-bottom: 2px solid #dee2e6;
+            box-shadow: 0 2px 2px -1px rgba(0,0,0,0.05);
+        }
+
+        th, td { padding: 12px; text-align: right; border-bottom: 1px solid #eee; font-size: 0.85rem; }
+        tr:hover { background-color: #f9f9f9; }
+        
+        /* تنسيق زر العرض */
+        .btn-display { background: #17a2b8; color: white; padding: 15px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1.1rem; transition: 0.3s; }
+        .btn-display:hover:not(:disabled) { background: #138496; }
+        .btn-display:disabled { background: #ccc; cursor: not-allowed; }
+        
+        /* تنسيق رابط الجوال */
+        .phone-link { color: #007bff; text-decoration: none; font-weight: bold; }
+
+        /* تحسين شكل شريط التمرير */
+        .table-container::-webkit-scrollbar { width: 6px; }
+        .table-container::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -47,38 +90,54 @@
             </div>
         </div>
 
-        <div class="download-section">
-            <button id="downloadBtn" class="btn-download" disabled>📥 تنزيل قائمة المدارس غير المنجزة</button>
+        <div class="display-section">
+            <button id="displayDataBtn" class="btn-display" disabled>👁️ عرض قائمة المدارس المتعثرة</button>
+        </div>
+
+        <div id="tableWrapper" class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>المحافظة</th>
+                        <th>اسم المدرسة</th>
+                        <th>المدير/ة</th>
+                        <th>الجوال</th>
+                        <th>الايميل الرسمي</th>
+                    </tr>
+                </thead>
+                <tbody id="pendingTableBody">
+                </tbody>
+            </table>
         </div>
 
         <div id="loadingSpinner" class="spinner hidden"></div>
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx1_xZaPHomeGg40rrPAokN68-4nKVMi3IvBdOnVWOt2S4NSsZhQykdmf-yhBLMkizHgw/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbykpQrZwjsylUaaOClOhZJPuyYL38JLZJM8aBwaW1wfhU2XrcQTRoa-FRYbYLNlAEumDg/exec";
         let currentPendingList = [];
 
         async function fetchStats(supervisor = "all") {
             const spinner = document.getElementById("loadingSpinner");
+            const tableWrap = document.getElementById("tableWrapper");
+            
             spinner.classList.remove("hidden");
+            tableWrap.style.display = "none"; 
             
             try {
                 const response = await fetch(`${SCRIPT_URL}?action=getStats&supervisor=${encodeURIComponent(supervisor)}`);
                 const data = await response.json();
                 
-                // تحديث الأرقام
                 document.getElementById("totalCount").textContent = data.total;
                 document.getElementById("boysCount").textContent = data.boys;
                 document.getElementById("girlsCount").textContent = data.girls;
                 document.getElementById("doneCount").textContent = data.completed;
                 document.getElementById("pendingCount").textContent = data.pending;
                 
-                // تحديث شريط التقدم
                 const percent = data.total > 0 ? Math.round((data.completed / data.total) * 100) : 0;
                 document.getElementById("progressBar").style.width = percent + "%";
                 document.getElementById("progressText").textContent = percent + "%";
                 
-                // تحديث قائمة المشرفين (مرة واحدة فقط)
                 if (document.getElementById("supervisorSelect").options.length === 1) {
                     data.supervisors.forEach(s => {
                         let opt = document.createElement("option");
@@ -87,37 +146,43 @@
                     });
                 }
 
-                // حفظ قائمة المتعثرين للتنزيل
                 currentPendingList = data.pendingList;
-                document.getElementById("downloadBtn").disabled = currentPendingList.length === 0;
+                const btn = document.getElementById("displayDataBtn");
+                btn.disabled = currentPendingList.length === 0;
+                btn.textContent = `👁️ عرض المدارس المتعثرة (${currentPendingList.length})`;
 
             } catch (e) {
-                alert("خطأ في جلب البيانات");
+                alert("⚠️ خطأ في جلب البيانات، يرجى التأكد من نشر السكربت كإصدار جديد.");
             } finally {
                 spinner.classList.add("hidden");
             }
         }
 
-        // دالة تنزيل ملف CSV
-        document.getElementById("downloadBtn").onclick = () => {
-            if (currentPendingList.length === 0) return;
+        document.getElementById("displayDataBtn").onclick = () => {
+            const tbody = document.getElementById("pendingTableBody");
+            const tableWrap = document.getElementById("tableWrapper");
             
-            let csvContent = "\ufeffاسم المدرسة,الرقم الوزاري,المدير,الجوال\n";
+            tbody.innerHTML = ""; 
+
             currentPendingList.forEach(row => {
-                csvContent += `${row.name},${row.number},${row.principal},${row.phone}\n`;
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${row.area || "-"}</td>
+                    <td>${row.name || "-"}</td>
+                    <td>${row.principal || "-"}</td>
+                    <td><a href="tel:${row.phone}" class="phone-link">${row.phone || "-"}</a></td>
+                    <td><small>${row.email || "-"}</small></td>
+                `;
+                tbody.appendChild(tr);
             });
 
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a");
-            const url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", `متعثرين_${document.getElementById("supervisorSelect").value}.csv`);
-            link.click();
+            tableWrap.style.display = "block"; 
+            
+            // تمرير خفيف داخل الصفحة للتركيز على الجدول
+            tableWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
         };
 
         document.getElementById("supervisorSelect").onchange = (e) => fetchStats(e.target.value);
-
-        // تحميل البيانات عند فتح الصفحة
         window.onload = () => fetchStats();
     </script>
 </body>
