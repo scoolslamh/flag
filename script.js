@@ -1,5 +1,5 @@
 // ✅ الرابط المحدث لسكربت قوقل (الحساب الجديد)
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxX1BOpGYKn0zx9FSvaz3q5Cy0wR1Ded1eufP1JFkglzAwJXWFMT5xESKJYNXo8EL7h/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzmq9w5-tA60yIW9rlD7Ipai4fiX9s-PrVPrdGIahg50s7FBSDCjQIAB2bzNPD_WgG94w/exec";
 
 // ==========================================
 // 🔵 1. منطق صفحة الدخول (index.html)
