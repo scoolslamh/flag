@@ -287,3 +287,37 @@ input[readonly] {
     background-color: #f1b0b7;
     color: #491217;
 }
+/* تنسيق إطار التعهد الجديد */
+.acknowledgment-box {
+    background-color: #f8f9fa; /* خلفية رمادية فاتحة جداً */
+    border: 1px solid #dee2e6; /* إطار خفيف */
+    border-radius: 8px; /* حواف دائرية */
+    padding: 15px;
+    margin: 20px 0;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); /* ظل داخلي بسيط */
+}
+
+/* تنسيق الحاوية ليكون المربع في البداية */
+.ack-container {
+    display: flex;
+    align-items: flex-start; /* محاذاة المربع مع أول سطر */
+    cursor: pointer;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #495057;
+    gap: 12px; /* مسافة بين المربع والنص */
+}
+
+/* تكبير مربع التأكيد ليكون أسهل في اللمس على الجوال */
+.ack-container input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    margin-top: 3px; /* موازنة المربع مع نص السطر الأول */
+    cursor: pointer;
+    accent-color: #155724; /* تغيير لون التحديد للأخضر ليناسب الهوية */
+}
+
+.ack-text {
+    flex: 1; /* جعل النص يأخذ باقي المساحة */
+    font-weight: 500;
+}
